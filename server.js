@@ -82,7 +82,7 @@ app.post('/api/test', (req, res) => {
       res.status(200).json({"result":response});
     })
     .catch(error => {
-      res.status(500).send({"error":error})
+      res.status(500).json({"error":error});
     });
 
 });
