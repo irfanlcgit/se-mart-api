@@ -67,7 +67,17 @@ app.post('/api/test', (req, res) => {
 	  	else
 	    	res.status(500).send({"message": err.sqlMessage});
 	});*/
-    axios.get("https://partnerlink.fastpay.co.id:4343/devel/cek_ip.php")
+
+    var postBody = {
+        "method": "fastpay.pulsa",
+        "uid": "SP125408",
+        "pin": "765384",
+        "kode_produk": "kode_produkvalue",
+        "no_hp": "no_hpvalue",
+        "ref1": "ref1value",
+    };
+
+    axios.post("https://partnerlink.fastpay.co.id:4343/json/index_devel.php", postBody)
     .then(response => {
       res.status(200).json({"result":response});
     })
