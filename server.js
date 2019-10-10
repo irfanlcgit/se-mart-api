@@ -58,7 +58,7 @@ app.get('/', (req, res) => {
 
 app.post('/api/test', (req, res) => {
 
-    res.json({"message": "Welcome to APIs."});
+    //res.json({"message": "Welcome to APIs."});
 
 	/*connection.query('SELECT * from users LIMIT 2', function(err, rows, fields) {
 		connection.end();
@@ -67,14 +67,15 @@ app.post('/api/test', (req, res) => {
 	  	else
 	    	res.status(500).send({"message": err.sqlMessage});
 	});*/
-    
-    /*axios.post(`https://partnerlink.fastpay.co.id:4343/devel/cek_ip.php`)
+    var postBody = {};
+
+    axios.post(`https://partnerlink.fastpay.co.id:4343/devel/cek_ip.php`, postBody)
     .then(posts => {
       res.status(200).json(posts.data);
     })
     .catch(error => {
       res.status(500).send(error)
-    });*/
+    });
 
 });
 
