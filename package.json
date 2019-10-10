@@ -1,7 +1,7 @@
 {
-  "name": "easy-notes-app",
+  "name": "se-mart-api",
   "version": "1.0.0",
-  "description": "Never miss a thing in Life. Take notes quickly. Organize and keep track of all your notes.",
+  "description": "SE Mart APIs",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

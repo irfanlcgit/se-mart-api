@@ -38,33 +38,35 @@ var connection = mysql.createConnection({
     password : 'irfanlc',
 });
 
-connection.connect(function(err) {
+/*connection.connect(function(err) {
     if (err) {
         console.error('Error connecting: ' + err.stack);
         return;
     }
 
     console.log('Connected as id ' + connection.threadId);
-});
+});*/
 
 
 // define a simple route
 app.get('/', (req, res) => {
-    res.json({"message": "Welcome to EasyNotes application. Take notes quickly. Organize and keep track of all your notes."});
+    res.json({"message": "Welcome to APIs."});
 });
 
 // Require Notes routes
-require('./app/routes/note.routes.js')(app);
+//require('./app/routes/note.routes.js')(app);
 
 app.post('/api/test', (req, res) => {
 
-	connection.query('SELECT * from user LIMIT 2', function(err, rows, fields) {
+    res.json({"message": "Welcome to APIs."});
+
+	/*connection.query('SELECT * from users LIMIT 2', function(err, rows, fields) {
 		connection.end();
 	  	if (!err)
 	  		res.status(200).json({"result": rows});
 	  	else
 	    	res.status(500).send({"message": err.sqlMessage});
-	});
+	});*/
     
     /*axios.post(`https://partnerlink.fastpay.co.id:4343/devel/cek_ip.php`)
     .then(posts => {
@@ -77,6 +79,6 @@ app.post('/api/test', (req, res) => {
 });
 
 // listen for requests
-app.listen(3001, () => {
-    console.log("Server is listening on port 3001");
+app.listen(3008, () => {
+    console.log("Server is listening on port 3008");
 });
