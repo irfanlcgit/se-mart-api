@@ -77,7 +77,7 @@ app.post('/api/test', (req, res) => {
         "ref1": "ref1value",
     };
 
-    axios.post("https://partnerlink.fastpay.co.id:4343/json/index_devel.php", postBody)
+    axios.post("https://partnerlink.fastpay.co.id:4343/devel/cek_ip.php", postBody)
     .then(response => {
       res.status(200).json({"result":response});
     })
