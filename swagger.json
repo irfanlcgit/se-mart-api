@@ -1,0 +1,131 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
+    "version": "1.0",
+    "title": "PPOB API,s",
+    "contact": {
+      "email": "link2mirfan@gmail.com"
+    }
+  },
+  "host": "localhost:3008",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "fastpay",
+      "description": "Access to fastpay apis"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/mobile-credit": {
+      "post": {
+        "tags": [
+          "fastpay"
+        ],
+        "summary": "Pay your mobile credit",
+        "description": "",
+        "operationId": "mobileCredit",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Body object that needs to be create transection",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/mobileCredit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description":"successful operation"
+          },
+          "400": {
+            "description": "Reqired data is missing"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+    
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "mobileCredit": {
+      "type": "object",
+      "required": [
+        "method"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "example": "fastpay.pulsa"
+        },
+        "uid": {
+          "type": "string"
+        },
+        "pin": {
+          "type": "string"
+        },
+        "kode_produk": {
+          "type": "string"
+        },
+        "no_hp": {
+          "type": "string"
+        },
+        "ref1": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "mobileCredit"
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,13 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator');
+const dotenv = require('dotenv');
+dotenv.config();
 const bodyParser = require('body-parser');
 
 // create express app
 const app = express();
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 // declare axios for making http requests
 const axios = require('axios');
@@ -53,8 +58,35 @@ app.get('/', (req, res) => {
     res.json({"message": "Welcome to APIs."});
 });
 
+var options = {
+  customCss: '.swagger-ui .topbar { display: none }'
+};
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
+
 // Require Notes routes
 //require('./app/routes/note.routes.js')(app);
+
+app.post('/api/mobile-credit',[
+        check('method').not().isEmpty()
+    ], (req, res) => {
+
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            return res.status(400).send({
+                code: 400,
+                type: "mobileCredit",
+                message: "Required values are missing.",
+                errors: errors.array()
+            });
+        }    
+
+    res.json({
+        code: 200,
+        type: "mobileCredit",
+        message: "Mobile credit success"
+    });
+});
 
 app.post('/api/test', (req, res) => {
 
@@ -87,7 +119,8 @@ app.post('/api/test', (req, res) => {
 
 });
 
+const port = process.env.PORT;
 // listen for requests
-app.listen(3008, () => {
-    console.log("Server is listening on port 3008");
+app.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
 });
