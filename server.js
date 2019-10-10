@@ -30,7 +30,7 @@ mongoose.connect(dbConfig.url, {
     process.exit();
 });*/
 
-var mysql      = require('mysql');
+/*var mysql      = require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     database : 'paylessdemo',
@@ -38,7 +38,7 @@ var connection = mysql.createConnection({
     password : 'irfanlc',
 });
 
-/*connection.connect(function(err) {
+connection.connect(function(err) {
     if (err) {
         console.error('Error connecting: ' + err.stack);
         return;
@@ -67,14 +67,12 @@ app.post('/api/test', (req, res) => {
 	  	else
 	    	res.status(500).send({"message": err.sqlMessage});
 	});*/
-    var postBody = {};
-
-    axios.post(`https://partnerlink.fastpay.co.id:4343/devel/cek_ip.php`, postBody)
+    axios.get("https://partnerlink.fastpay.co.id:4343/devel/cek_ip.php")
     .then(response => {
       res.status(200).json({"result":response});
     })
     .catch(error => {
-      res.status(500).send({"reeot":error})
+      res.status(500).send({"error":error})
     });
 
 });
