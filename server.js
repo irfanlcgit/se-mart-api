@@ -77,7 +77,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
 
     axios.post("https://partnerlink.fastpay.co.id:4343/json/index_devel.php", postBody)
     .then(response => {
-        console.log(response);
+        console.log(response.data);
     })
     .catch(error => {
         console.log(error);
