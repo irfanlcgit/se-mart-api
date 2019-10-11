@@ -111,10 +111,20 @@ app.post('/api/test', (req, res) => {
 
     axios.post("https://partnerlink.fastpay.co.id:4343/json/index_devel.php", postBody)
     .then(response => {
-      res.status(200).json({"result":response});
+        res.status(200).json({
+            code: 200,
+            type: "mobileCredit",
+            message: "Mobile credit success",
+            result:response
+        });
     })
     .catch(error => {
-      res.status(500).send(error)
+        res.status(500).send({
+            code: 500,
+            type: "mobileCredit",
+            message: "Required values are missing.",
+            error:error
+        });
     });
 
 });
