@@ -119,7 +119,7 @@ app.post('/api/test', (req, res) => {
 
 });
 
-const port = process.env.PORT;
+const port = 3008;
 // listen for requests
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
