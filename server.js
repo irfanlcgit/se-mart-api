@@ -119,12 +119,8 @@ app.post('/api/test', (req, res) => {
         });
     })
     .catch(error => {
-        res.status(500).send({
-            code: 500,
-            type: "mobileCredit",
-            message: "Required values are missing.",
-            error:error
-        });
+        res.json({error: error});
+        
     });
 
 });
