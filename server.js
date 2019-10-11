@@ -52,6 +52,42 @@ connection.connect(function(err) {
     console.log('Connected as id ' + connection.threadId);
 });*/
 
+const https = require('https')
+
+    const data = JSON.stringify({
+        "method": "fastpay.pulsa",
+        "uid": "FA9919",
+        "pin": "------",
+        "kode_produk": "I10H",
+        "no_hp": "085648889293",
+        "ref1": "ref1 value",
+    })
+
+    const options1 = {
+      hostname: 'https://partnerlink.fastpay.co.id',
+      port: 4343,
+      path: '/json/index_devel.php',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': data.length
+      }
+    }
+
+    const req = https.request(options1, res => {
+      console.log(`statusCode: ${res.statusCode}`)
+
+      res.on('data', d => {
+        process.stdout.write(d)
+      })
+    })
+
+    req.on('error', error => {
+      console.error(error)
+    })
+
+    req.write(data)
+    req.end()
 
 // define a simple route
 app.get('/', (req, res) => {
@@ -92,13 +128,13 @@ app.post('/api/test', (req, res) => {
 
     //res.json({"message": "Welcome to APIs."});
 
-	/*connection.query('SELECT * from users LIMIT 2', function(err, rows, fields) {
-		connection.end();
-	  	if (!err)
-	  		res.status(200).json({"result": rows});
-	  	else
-	    	res.status(500).send({"message": err.sqlMessage});
-	});*/
+    /*connection.query('SELECT * from users LIMIT 2', function(err, rows, fields) {
+        connection.end();
+        if (!err)
+            res.status(200).json({"result": rows});
+        else
+            res.status(500).send({"message": err.sqlMessage});
+    });*/
 
     var postBody = {
         "method": "fastpay.pulsa",
@@ -119,9 +155,54 @@ app.post('/api/test', (req, res) => {
         });
     })
     .catch(error => {
-        res.json({error: error});
-        
+        res.status(500).json({
+            code: 500,
+            type: "mobileCredit",
+            message: "Something went wrong.",
+            error:error
+        });
     });
+
+});
+
+app.post('/api/testing', (req1, res) => {
+
+    const https = require('https')
+
+    const data = JSON.stringify({
+        "method": "fastpay.pulsa",
+        "uid": "FA9919",
+        "pin": "------",
+        "kode_produk": "I10H",
+        "no_hp": "085648889293",
+        "ref1": "ref1 value",
+    })
+
+    const options = {
+      hostname: 'https://partnerlink.fastpay.co.id',
+      port: 4343,
+      path: '/json/index_devel.php',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': data.length
+      }
+    }
+
+    const req = https.request(options, res => {
+      console.log(`statusCode: ${res.statusCode}`)
+
+      res.on('data', d => {
+        process.stdout.write(d)
+      })
+    })
+
+    req.on('error', error => {
+      console.error(error)
+    })
+
+    req.write(data)
+    req.end()
 
 });
 
