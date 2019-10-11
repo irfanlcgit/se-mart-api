@@ -64,7 +64,7 @@ const https = require('https')
     })
 
     const options1 = {
-      hostname: 'https://partnerlink.fastpay.co.id',
+      hostname: 'https://partnerlink.fastpay.co.id:4343',
       port: 4343,
       path: '/json/index_devel.php',
       method: 'POST',
