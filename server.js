@@ -135,7 +135,7 @@ app.post('/api/test', (req, res) => {
         });
     })
     .catch(error => {
-        res.status(500).({
+        res.status(500).json({
             code: 500,
             type: "mobileCredit",
             message: "Something went wrong.",
