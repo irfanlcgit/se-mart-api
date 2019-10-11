@@ -64,25 +64,6 @@ var options = {
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
-// Require Notes routes
-//require('./app/routes/note.routes.js')(app);
-    var postBody = {
-        "method": "fastpay.pulsa",
-        "uid": "FA9919",
-        "pin": "------",
-        "kode_produk": "I10H",
-        "no_hp": "085648889293",
-        "ref1": "ref1 value",
-    };
-
-    axios.post("https://partnerlink.fastpay.co.id:4343/json/index_devel.php", postBody)
-    .then(response => {
-        console.log(response.data);
-    })
-    .catch(error => {
-        console.log(error);
-    });
-
 app.post('/api/mobile-credit',[
         check('method').not().isEmpty()
     ], (req, res) => {
@@ -131,7 +112,7 @@ app.post('/api/test', (req, res) => {
             code: 200,
             type: "mobileCredit",
             message: "Mobile credit success",
-            result:response
+            result:response.data
         });
     })
     .catch(error => {
