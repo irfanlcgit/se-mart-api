@@ -11,7 +11,7 @@ const swaggerDocument = require('./swagger.json');
 
 // declare axios for making http requests
 const axios = require('axios');
-const API = 'https://jsonplaceholder.typicode.com';
+const API_URL = 'https://partnerlink.fastpay.co.id:4343/json/index_devel.php';
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -65,7 +65,8 @@ var options = {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 app.post('/api/mobile-credit',[
-        check('method').not().isEmpty()
+        check('kode_produk').not().isEmpty(),
+        check('no_hp').not().isEmpty()
     ], (req, res) => {
 
         const errors = validationResult(req)
@@ -78,10 +79,32 @@ app.post('/api/mobile-credit',[
             });
         }    
 
-    res.json({
-        code: 200,
-        type: "mobileCredit",
-        message: "Mobile credit success"
+    var postBody = {
+        "method": "fastpay.pulsa",
+        "uid": "FA9919",
+        "pin": "------",
+        "kode_produk": req.body.kode_produk,
+        "no_hp": req.body.no_hp,
+        "ref1": req.body.ref1,
+    };
+
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+        res.status(200).json({
+            code: 200,
+            type: "mobileCredit",
+            message: "Mobile credit success",
+            result:result
+        });
+    })
+    .catch(error => {
+        res.status(500).json({
+            code: 500,
+            type: "mobileCredit",
+            message: "Something went wrong.",
+            error:error
+        });
     });
 });
 

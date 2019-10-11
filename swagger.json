@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
+    "description": "Realize your dreams by becoming a Fastpay Modern Shop Partner.",
     "version": "1.0",
-    "title": "PPOB API,s",
+    "title": "FASTPAY API,s",
     "contact": {
       "email": "link2mirfan@gmail.com"
     }
@@ -38,12 +38,6 @@
           "application/json"
         ],
         "parameters": [
-          {
-            "name": "api_key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
           {
             "in": "body",
             "name": "body",
@@ -85,27 +79,21 @@
     "mobileCredit": {
       "type": "object",
       "required": [
-        "method"
+        "kode_produk",
+        "no_hp"
       ],
       "properties": {
-        "method": {
-          "type": "string",
-          "example": "fastpay.pulsa"
-        },
-        "uid": {
-          "type": "string"
-        },
-        "pin": {
-          "type": "string"
-        },
         "kode_produk": {
-          "type": "string"
+          "type": "string",
+          "example": "I10H"
         },
         "no_hp": {
-          "type": "string"
+          "type": "string",
+          "example": "085648889293"
         },
         "ref1": {
-          "type": "string"
+          "type": "string",
+          "example": "ref1 value"
         }
       },
       "xml": {
