@@ -102,11 +102,11 @@ app.post('/api/test', (req, res) => {
 
     var postBody = {
         "method": "fastpay.pulsa",
-        "uid": "SP125408",
-        "pin": "765384",
-        "kode_produk": "kode_produkvalue",
-        "no_hp": "no_hpvalue",
-        "ref1": "ref1value",
+        "uid": "FA9919",
+        "pin": "------",
+        "kode_produk": "I10H",
+        "no_hp": "085648889293",
+        "ref1": "ref1 value",
     };
 
     axios.post("https://partnerlink.fastpay.co.id:4343/json/index_devel.php", postBody)
