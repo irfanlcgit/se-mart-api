@@ -108,6 +108,62 @@ app.post('/api/mobile-credit',[
     });
 });
 
+app.post('/api/pay-phone-bill',[
+        check('area_code').not().isEmpty(),
+        check('phone_number').not().isEmpty()
+    ], (req, res) => {
+
+        res.status(200).json({
+            code: 200,
+            type: "payPhoneBill",
+            message: "In progress"
+        });
+
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            return res.status(400).send({
+                code: 400,
+                type: "mobileCredit",
+                message: "Required values are missing.",
+                errors: errors.array()
+            });
+        }    
+
+    var postBody = {
+        "method": "fastpay.pay",
+        "uid": "FA9919",
+        "pin": "------",
+        "ref1": req.body.ref1,
+        "ref2": req.body.ref2,
+        "ref3": "",
+        "nominal": req.body.nominal,
+        "kode_produk": "TELEPON",
+        "idpel1": req.body.area_code,
+        "idpel2": req.body.phone_number,
+        "idpel3": ""
+    }
+
+
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+        res.status(200).json({
+            code: 200,
+            type: "payPhoneBill",
+            message: "Successfully paid",
+            result:result
+        });
+    })
+    .catch(error => {
+        res.status(500).json({
+            code: 500,
+            type: "payPhoneBill",
+            message: "Something went wrong.",
+            error:error
+        });
+    });
+});
+
 app.post('/api/test', (req, res) => {
 
     //res.json({"message": "Welcome to APIs."});

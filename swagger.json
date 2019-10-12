@@ -65,6 +65,51 @@
           }
         ]
       }
+    },
+    "/pay-phone-bill": {
+      "post": {
+        "tags": [
+          "fastpay"
+        ],
+        "summary": "Pay your phone bill",
+        "description": "",
+        "operationId": "payPhoneBill",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Body object that needs to be create transection",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/payPhoneBill"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description":"successful operation"
+          },
+          "400": {
+            "description": "Reqired data is missing"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
     }
     
   },
@@ -94,6 +139,37 @@
         "ref1": {
           "type": "string",
           "example": "ref1 value"
+        }
+      },
+      "xml": {
+        "name": "mobileCredit"
+      }
+    },
+    "payPhoneBill": {
+      "type": "object",
+      "required": [
+        "area_code",
+        "phone_number",
+        "ref2",
+        "nominal"
+      ],
+      "properties": {
+        "area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "nominal": {
+          "type": "string"
+        },
+        "ref1": {
+          "type": "string",
+          "example": "ref1 value"
+        },
+        "ref2": {
+          "type": "string",
+          "example": "ref2 value"
         }
       },
       "xml": {
