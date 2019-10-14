@@ -3,10 +3,10 @@ const {SQL_SERVER, SQL_DATABASE, SQL_USER, SQL_PASSWORD} = process.env;
 
 //local mysql db connection
 var connection = mysql.createConnection({
-    host     : '128.199.170.4',
-    database : 'ppob',
-    user     : 'ppob_user',
-    password : 'Ppob@2019#'
+    host     : SQL_SERVER,
+    database : SQL_DATABASE,
+    user     : SQL_USER,
+    password : SQL_PASSWORD
 });
 
 connection.connect(function(err) {

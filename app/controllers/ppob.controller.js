@@ -39,7 +39,7 @@ exports.mobileCredit = (req, res) => {
 			        code: 200,
 			        type: "mobileCredit",
 			        message: "Mobile credit success",
-			        result:transection
+			        result:result
 			    });
 		    }
 		});
