@@ -64,16 +64,11 @@ exports.mobileCredit = (req, res) => {
 
 // Create and Save a phone bill
 exports.payPhoneBill = (req, res) => {
-	res.status(200).json({
-        code: 200,
-        type: "payPhoneBill",
-        message: "In progress"
-    });
-
-    var postBody = {
+	
+	var postBody = {
         "method": "fastpay.pay",
-        "uid": "FA9919",
-        "pin": "------",
+        "uid": API_UID,
+        "pin": API_PIN,
         "ref1": req.body.ref1,
         "ref2": req.body.ref2,
         "ref3": "",
@@ -107,8 +102,8 @@ exports.payPhoneBill = (req, res) => {
 		    	res.status(200).json({
 			        code: 200,
 			        type: "payPhoneBill",
-			        message: "Mobile credit success",
-			        result:transection
+			        message: "Phone bill paid successfully.",
+			        result:result
 			    });
 		    }
 		});
