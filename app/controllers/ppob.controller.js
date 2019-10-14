@@ -95,6 +95,17 @@ exports.mobileCredit = (req, res) => {
 
 // Create and Save a phone bill
 exports.payPhoneBill = (req, res) => {
+
+	const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+
+    if (!errors.isEmpty()) {
+        return res.status(400).send({
+            code: 400,
+            type: "mobileCredit",
+            message: "Required values are missing.",
+            errors: errors.array()
+        });
+    }
 	
 	var postBody = {
         "method": "fastpay.pay",
