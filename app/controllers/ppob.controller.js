@@ -5,22 +5,20 @@ const {API_URL, API_UID, API_PIN} = process.env;
 const { body, validationResult } = require('express-validator/check');
 
 exports.validate = (method) => {
-  switch (method) {
-    case 'mobileCredit': {
-     return [ 
-        body('kode_produk', 'kode_produk doesn\'t exists').not().isEmpty(),
-        body('no_hp', 'kode_produk doesn\'t exists').not().isEmpty()
-       ]   
-    }
-    case 'payPhoneBill': {
-     return [ 
-        body('area_code', 'area_code doesn\'t exists').not().isEmpty(),
-        body('phone_number', 'phone_number doesn\'t exists').not().isEmpty(),
-        body('nominal', 'nominal doesn\'t exists').not().isEmpty(),
-        body('ref2', 'ref2 doesn\'t exists').not().isEmpty()
-       ]   
-    }
-  }
+	if(method === 'mobileCredit'){
+		return [ 
+        	body('kode_produk', 'kode_produk doesn\'t exists').not().isEmpty(),
+        	body('no_hp', 'kode_produk doesn\'t exists').not().isEmpty()
+       ] 
+	}
+	if(method === 'payPhoneBill'){
+		return [ 
+        	body('area_code', 'area_code doesn\'t exists').not().isEmpty(),
+        	body('phone_number', 'phone_number doesn\'t exists').not().isEmpty(),
+        	body('nominal', 'nominal doesn\'t exists').not().isEmpty(),
+        	body('ref2', 'ref2 doesn\'t exists').not().isEmpty()
+       ]
+	}
 }
 
 
