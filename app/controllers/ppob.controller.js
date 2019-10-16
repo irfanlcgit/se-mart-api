@@ -19,8 +19,54 @@ exports.validate = (method) => {
         	body('ref2', 'ref2 doesn\'t exists').not().isEmpty()
        ]
 	}
+	if(method === 'payBPJS'){
+		return [ 
+        	body('kode_produk', 'kode_produk doesn\'t exists').not().isEmpty(),
+        	body('customer_id', 'customer_id doesn\'t exists').not().isEmpty(),
+        	body('periode', 'periode doesn\'t exists').not().isEmpty(),
+        	body('phone_number', 'phone_number doesn\'t exists').not().isEmpty(),
+        	body('nominal', 'nominal doesn\'t exists').not().isEmpty(),
+        	body('ref2', 'ref2 doesn\'t exists').not().isEmpty()
+       ]
+	}
 }
 
+
+// Get mobile credit pricelist
+exports.pricelistCredit = (req, res) => {
+
+    var postBody = {
+        "method": "fastpay.harga",
+        "uid": API_UID,
+        "pin": API_PIN,
+        "produk": "TELKOMSEL"
+    };
+
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+
+        var new_transection = new Transection({
+        	Type: "pricelistCredit",
+        	response: result
+        });
+
+        res.status(200).json({
+            code: 200,
+            type: "pricelistCredit",
+            message: "Mobile credit pricelist success",
+            result:result
+        });
+    })
+    .catch(error => {
+        res.status(500).json({
+            code: 500,
+            type: "mobileCredit",
+            message: "Something went wrong.",
+            error:error
+        });
+    });
+}
 
 // Create and Save a mobile credit
 exports.mobileCredit = (req, res) => {
@@ -152,6 +198,73 @@ exports.payPhoneBill = (req, res) => {
         res.status(500).json({
             code: 500,
             type: "payPhoneBill",
+            message: "Something went wrong.",
+            error:error
+        });
+    });
+};
+
+
+// Create and Save a phone bill
+exports.payBPJS = (req, res) => {
+
+	const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+
+    if (!errors.isEmpty()) {
+        return res.status(400).send({
+            code: 400,
+            type: "payBPJS",
+            message: "Required values are missing.",
+            errors: errors.array()
+        });
+    }
+	
+	var postBody = {
+        "method": "fastpay.bpjspay",
+        "uid": API_UID,
+        "pin": API_PIN,
+        "ref1": req.body.ref1,
+        "ref2": req.body.ref2,
+        "nominal": req.body.nominal,
+        "kode_produk": req.body.kode_produk,
+        "idpel1": req.body.customer_id,
+        "periode": req.body.periode,
+        "no_hp": req.body.phone_number
+    }
+
+
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+        
+        var new_transection = new Transection({
+        	Type: "payBPJS",
+        	response: result
+        });
+
+        Transection.createTransection(new_transection, function(err, transection) {
+		    
+		    if (err){
+		      	res.status(500).json({
+			        code: 500,
+			        type: "payBPJS",
+			        message: "Something went wrong, Not inserted into database.",
+			        error:err
+			    });
+		    }else{
+		    	res.status(200).json({
+			        code: 200,
+			        type: "payBPJS",
+			        message: "BPJS paid successfully.",
+			        result:result
+			    });
+		    }
+		});
+    })
+    .catch(error => {
+        res.status(500).json({
+            code: 500,
+            type: "payBPJS",
             message: "Something went wrong.",
             error:error
         });

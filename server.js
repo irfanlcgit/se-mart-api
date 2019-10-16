@@ -8,8 +8,9 @@ const expressValidator = require('express-validator');
 
 // create express app
 const app = express();
+const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+//const swaggerDocument = require('./swagger.json');
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,6 +25,36 @@ app.use(expressValidator());
 app.get('/', (req, res) => {
     res.json({"message": "Welcome to APIs."});
 });
+
+// Extended: https://swagger.io/specification/#infoObject
+const swaggerOptions = {
+  swaggerDefinition: {
+    swagger: "2.0",
+    info: {
+      title: "PPOB APIs",
+      version: '1.0.0',
+      description: "Realize your dreams by becoming a Fastpay Modern Shop Partner.",
+      contact: {
+        name: "Developer",
+        email: "link2mirfan@gmail.com"
+      },
+      servers: ["http://localhost:3008"],
+      basePath: '/api'
+    },
+      securityDefinitions: {
+        bearerAuth: {
+          type: 'apiKey',
+          name: 'Authorization',
+          scheme: 'bearer',
+          in: 'header',
+        },
+      },
+  },
+  apis: ['app/routes/*.js']
+  //apis: ["server.js"]
+};
+
+const swaggerDocument = swaggerJsDoc(swaggerOptions);
 
 var options = {
   customCss: '.swagger-ui .topbar { display: none }'
