@@ -77,6 +77,92 @@ module.exports = (app) => {
  */
  app.post('/api/mobile-credit', ppob.validate('mobileCredit'), ppob.mobileCredit);
 
+
+// Get phone inquiry
+/**
+ * @swagger
+ * /phone-inq:
+ *   post:
+ *     summary: Get your Phone Inquiry
+ *     tags:
+ *      - fastpay 
+ *     security:
+ *      - bearerAuth: [] 
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         description: Body object that needs to be create transection
+ *         required: true
+ *         schema:
+ *           type: object
+ *           required:
+ *             - area_code
+ *             - phone_number
+ *           properties:
+ *             area_code:
+ *               type: string
+ *             phone_number:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: A successful response
+ *       400:
+ *         description: Reqired data is missing
+ *       401:
+ *         description: Unauthorized
+ *     api_key: []
+ */
+ app.post('/api/phone-inq', ppob.validate('inquiryPhone'), ppob.inquiryPhone);
+
+// Get a BPJS Payment inquiry
+
+/**
+ * @swagger
+ * /inq-bpjs:
+ *   post:
+ *     summary: Get your PBJS Inquiry
+ *     tags:
+ *      - fastpay 
+ *     security:
+ *      - bearerAuth: [] 
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         description: Body object that needs to be create transection
+ *         required: true
+ *         schema:
+ *           type: object
+ *           required:
+ *             - kode_produk
+ *             - customer_id
+ *             - periode
+ *           properties:
+ *             kode_produk:
+ *               type: string
+ *             customer_id:
+ *               type: string
+ *               example: 8888801821212256
+ *             periode:
+ *               type: string
+ *               example: 12
+ *             ref1:
+ *               type: string
+ *               example: ref1 value
+ *     responses:
+ *       200:
+ *         description: A successful response
+ *       400:
+ *         description: Reqired data is missing
+ *       401:
+ *         description: Unauthorized
+ *     api_key: []
+ */
+ 
+ app.post('/api/inq-bpjs', ppob.validate('bpjsInquiry'), ppob.bpjsInquiry);
 // Create a BPJS Payment
 
 /**

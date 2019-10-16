@@ -11,12 +11,25 @@ exports.validate = (method) => {
         	body('phone_number', 'phone_number doesn\'t exists').not().isEmpty()
        ] 
 	}
+	if(method === 'inquiryPhone'){
+		return [ 
+        	body('area_code', 'area_code doesn\'t exists').not().isEmpty(),
+        	body('phone_number', 'phone_number doesn\'t exists').not().isEmpty()
+       ]
+	}
 	if(method === 'payPhoneBill'){
 		return [ 
         	body('area_code', 'area_code doesn\'t exists').not().isEmpty(),
         	body('phone_number', 'phone_number doesn\'t exists').not().isEmpty(),
         	body('nominal', 'nominal doesn\'t exists').not().isEmpty(),
         	body('ref2', 'ref2 doesn\'t exists').not().isEmpty()
+       ]
+	}
+	if(method === 'bpjsInquiry'){
+		return [ 
+        	body('kode_produk', 'kode_produk doesn\'t exists').not().isEmpty(),
+        	body('customer_id', 'customer_id doesn\'t exists').not().isEmpty(),
+        	body('periode', 'periode doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'payBPJS'){
@@ -131,6 +144,51 @@ exports.mobileCredit = (req, res) => {
     });
 };
 
+// Inquiry Phone
+exports.inquiryPhone = (req, res) => {
+
+	const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+
+    if (!errors.isEmpty()) {
+        return res.status(400).send({
+            code: 400,
+            type: "inquiryPhone",
+            message: "Required values are missing.",
+            errors: errors.array()
+        });
+    }
+    
+    var postBody = {
+        "method": "fastpay.inq",
+        "uid": API_UID,
+        "pin": API_PIN,
+        "ref1": "REF1_VALUE",
+        "kode_produk": "TELEPON",
+        "idpel1": req.body.area_code,
+        "idpel2": req.body.phone_number,
+    	"idpel3": ""
+    };
+
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+
+        res.status(200).json({
+            code: 200,
+            type: "inquiryPhone",
+            message: "Inquiry success",
+            result:result
+        });
+    })
+    .catch(error => {
+        res.status(500).json({
+            code: 500,
+            type: "inquiryPhone",
+            message: "Something went wrong.",
+            error:error
+        });
+    });
+}
 
 // Create and Save a phone bill
 exports.payPhoneBill = (req, res) => {
@@ -198,6 +256,51 @@ exports.payPhoneBill = (req, res) => {
         });
     });
 };
+
+// BPJS Inquiry
+exports.bpjsInquiry = (req, res) => {
+
+	const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+
+    if (!errors.isEmpty()) {
+        return res.status(400).send({
+            code: 400,
+            type: "bpjsInquiry",
+            message: "Required values are missing.",
+            errors: errors.array()
+        });
+    }
+
+    var postBody = {
+        "method": "fastpay.bpjsinq",
+        "uid": API_UID,
+        "pin": API_PIN,
+        "ref1": "REF1_VALUE",
+        "kode_produk": req.body.kode_produk,
+    	"idpel1": req.body.customer_id,
+    	"periode": req.body.periode
+    };
+
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+
+        res.status(200).json({
+            code: 200,
+            type: "bpjsInquiry",
+            message: "BPJS Inquiry success",
+            result:result
+        });
+    })
+    .catch(error => {
+        res.status(500).json({
+            code: 500,
+            type: "bpjsInquiry",
+            message: "Something went wrong.",
+            error:error
+        });
+    });
+}
 
 
 // Create and Save a phone bill
