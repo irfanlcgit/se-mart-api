@@ -25,6 +25,11 @@ exports.validate = (method) => {
         	body('ref2', 'ref2 doesn\'t exists').not().isEmpty()
        ]
 	}
+	if(method === 'inquiryElectricity'){
+		return [ 
+        	body('customer_id', 'customer_id doesn\'t exists').not().isEmpty()
+       ]
+	}
 	if(method === 'payElectricityBill'){
 		return [ 
         	body('customer_id', 'customer_id doesn\'t exists').not().isEmpty(),

@@ -199,7 +199,7 @@ module.exports = (app) => {
  *         description: Unauthorized
  *     api_key: []
  */
- app.post('/api/electricity-inq', ppob.validate('inquiryPhone'), ppob.inquiryElectricity);
+ app.post('/api/electricity-inq', ppob.validate('inquiryElectricity'), ppob.inquiryElectricity);
 
 
 
