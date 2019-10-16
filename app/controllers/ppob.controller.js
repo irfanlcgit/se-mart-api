@@ -370,48 +370,32 @@ exports.payBPJS = (req, res) => {
 };
 
 
-// Create a phone bill
-/**
- * @swagger
- * /pay-phone-bill:
- *  post:
- *    summary: Pay your mobile credit
- *    tags:
- *      - fastpay
- *    security:
- *      - bearerAuth: []
- *  parameters:
- *    - name: body
- *      in: body
- *      description: Body object that needs to be create transection
- *      required: true
- *      schema:
- *        type: object
- *        required:
- *          - area_code
- *          - phone_number
- *          - ref2
- *          - nominal
- *        properties:
- *          area_code:
- *            type: string
- *          phone_number:
- *            type: string
- *          nominal:
- *            type: string
- *          ref1:
- *            type: string
- *            example: ref1 value
- *          ref2:
- *            type: string
- *            example: ref2 value 
- *  responses:
- *      '200':
- *        description: A successful response
- *      '400':
- *        description: Reqired data is missing
- *      '401':
- *        description: Unauthorized
- *  api_key: []
- */
-// app.post('/api/pay-phone-bill', ppob.validate('payPhoneBill'), ppob.payPhoneBill);
+// Get remaining balance
+exports.balanceCheck = (req, res) => {
+
+    var postBody = {
+        "method": "fastpay.balance",
+        "uid": API_UID,
+        "pin": API_PIN
+    };
+
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+
+        res.status(200).json({
+            code: 200,
+            type: "balanceCheck",
+            message: "Balance get success",
+            result:result
+        });
+    })
+    .catch(error => {
+        res.status(500).json({
+            code: 500,
+            type: "balanceCheck",
+            message: "Something went wrong.",
+            error:error
+        });
+    });
+}

@@ -242,7 +242,6 @@ module.exports = (app) => {
  *           properties:
  *             kode_produk:
  *               type: string
- *               example: I10H
  *             customer_id:
  *               type: string
  *               example: 8888801821212256
@@ -269,4 +268,32 @@ module.exports = (app) => {
  */
  
  app.post('/api/pay-bpjs', ppob.validate('payBPJS'), ppob.payBPJS);
+
+
+// Get remaining balance
+
+/**
+ * @swagger
+ * /balance-check:
+ *   get:
+ *     summary: Get remaining balance
+ *     description: Returns remaining balance
+ *     tags:
+ *      - fastpay 
+ *     security:
+ *      - bearerAuth: [] 
+ *     produces:
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: A successful response
+ *       400:
+ *         description: Reqired data is missing
+ *       401:
+ *         description: Unauthorized
+ *     api_key: []
+ */
+
+ app.get('/api/balance-check', ppob.pricelistCredit);
+
 }
