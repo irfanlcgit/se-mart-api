@@ -294,6 +294,6 @@ module.exports = (app) => {
  *     api_key: []
  */
 
- app.get('/api/balance-check', ppob.pricelistCredit);
+ app.get('/api/balance-check', ppob.balanceCheck);
 
 }
