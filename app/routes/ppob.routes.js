@@ -5,7 +5,7 @@ module.exports = (app) => {
 
 /**
  * @swagger
- * /mobile-credit-pricelist:
+ * /pricelist/{produk}:
  *   get:
  *     summary: Get mobile credit price list
  *     description: Returns mobile credit price list
@@ -15,6 +15,12 @@ module.exports = (app) => {
  *      - bearerAuth: [] 
  *     produces:
  *      - application/json
+ *     parameters:
+ *       - name: produk
+ *         in: path
+ *         description: TELKOMSEL | KARTU3 code for return pricelist
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: A successful response
@@ -25,7 +31,7 @@ module.exports = (app) => {
  *     api_key: []
  */
 
- app.get('/api/mobile-credit-pricelist', ppob.pricelistCredit);
+ app.get('/api/pricelist/:produk', ppob.pricelistCredit);
 
 // Create a new mobile credit
 

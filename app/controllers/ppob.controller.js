@@ -39,7 +39,7 @@ exports.pricelistCredit = (req, res) => {
         "method": "fastpay.harga",
         "uid": API_UID,
         "pin": API_PIN,
-        "produk": "TELKOMSEL"
+        "produk": req.params.produk
     };
 
     axios.post(API_URL, postBody)
