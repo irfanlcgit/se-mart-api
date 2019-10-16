@@ -166,6 +166,88 @@ module.exports = (app) => {
  */
  app.post('/api/pay-phone-bill', ppob.validate('payPhoneBill'), ppob.payPhoneBill);
 
+// Get Electricity inquiry
+/**
+ * @swagger
+ * /electricity-inq:
+ *   post:
+ *     summary: Get your Electricity Inquiry
+ *     tags:
+ *      - fastpay 
+ *     security:
+ *      - bearerAuth: [] 
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         description: Body object that needs to be create transection
+ *         required: true
+ *         schema:
+ *           type: object
+ *           required:
+ *             - customer_id
+ *           properties:
+ *             customer_id:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: A successful response
+ *       400:
+ *         description: Reqired data is missing
+ *       401:
+ *         description: Unauthorized
+ *     api_key: []
+ */
+ app.post('/api/electricity-inq', ppob.validate('inquiryPhone'), ppob.inquiryElectricity);
+
+
+
+// Pay Electricity bill
+/**
+ * @swagger
+ * /pay-electricity-bill:
+ *   post:
+ *     summary: Pay your Electricity Bill
+ *     tags:
+ *      - fastpay 
+ *     security:
+ *      - bearerAuth: [] 
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         description: Body object that needs to be create transection
+ *         required: true
+ *         schema:
+ *           type: object
+ *           required:
+ *             - customer_id
+ *             - ref2
+ *             - nominal
+ *           properties:
+ *             customer_id:
+ *               type: string
+ *             nominal:
+ *               type: string
+ *             ref1:
+ *               type: string
+ *               example: ref1 value
+ *             ref2:
+ *               type: string
+ *               example: ref2 value
+ *     responses:
+ *       200:
+ *         description: A successful response
+ *       400:
+ *         description: Reqired data is missing
+ *       401:
+ *         description: Unauthorized
+ *     api_key: []
+ */
+ app.post('/api/pay-electricity-bill', ppob.validate('payPhoneBill'), ppob.payElectricityBill);
+
 // Get a BPJS Payment inquiry
 
 /**

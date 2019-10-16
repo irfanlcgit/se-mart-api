@@ -25,6 +25,13 @@ exports.validate = (method) => {
         	body('ref2', 'ref2 doesn\'t exists').not().isEmpty()
        ]
 	}
+	if(method === 'payElectricityBill'){
+		return [ 
+        	body('customer_id', 'customer_id doesn\'t exists').not().isEmpty(),
+        	body('nominal', 'nominal doesn\'t exists').not().isEmpty(),
+        	body('ref2', 'ref2 doesn\'t exists').not().isEmpty()
+       ]
+	}
 	if(method === 'bpjsInquiry'){
 		return [ 
         	body('kode_produk', 'kode_produk doesn\'t exists').not().isEmpty(),
@@ -251,6 +258,120 @@ exports.payPhoneBill = (req, res) => {
         res.status(500).json({
             code: 500,
             type: "payPhoneBill",
+            message: "Something went wrong.",
+            error:error
+        });
+    });
+};
+
+
+// Inquiry Electricity
+exports.inquiryElectricity = (req, res) => {
+
+	const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+
+    if (!errors.isEmpty()) {
+        return res.status(400).send({
+            code: 400,
+            type: "inquiryElectricity",
+            message: "Required values are missing.",
+            errors: errors.array()
+        });
+    }
+    
+    var postBody = {
+        "method": "fastpay.inq",
+        "uid": API_UID,
+        "pin": API_PIN,
+        "ref1": "REF1_VALUE",
+        "kode_produk": "PLNNONH",
+        "idpel1": req.body.customer_id,
+        "idpel2": "",
+    	"idpel3": ""
+    };
+
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+
+        res.status(200).json({
+            code: 200,
+            type: "inquiryElectricity",
+            message: "Inquiry success",
+            result:result
+        });
+    })
+    .catch(error => {
+        res.status(500).json({
+            code: 500,
+            type: "inquiryElectricity",
+            message: "Something went wrong.",
+            error:error
+        });
+    });
+}
+
+// Create and Save a Electricity bill
+exports.payElectricityBill = (req, res) => {
+
+	const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+
+    if (!errors.isEmpty()) {
+        return res.status(400).send({
+            code: 400,
+            type: "payElectricityBill",
+            message: "Required values are missing.",
+            errors: errors.array()
+        });
+    }
+	
+	var postBody = {
+        "method": "fastpay.pay",
+        "uid": API_UID,
+        "pin": API_PIN,
+        "ref1": req.body.ref1,
+        "ref2": req.body.ref2,
+        "ref3": "",
+        "nominal": req.body.nominal,
+        "kode_produk": "PLNNONH",
+        "idpel1": req.body.customer_id,
+        "idpel2": "",
+        "idpel3": ""
+    }
+
+
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+        
+        var new_transection = new Transection({
+        	Type: "payElectricityBill",
+        	response: result
+        });
+
+        Transection.createTransection(new_transection, function(err, transection) {
+		    
+		    if (err){
+		      	res.status(500).json({
+			        code: 500,
+			        type: "payElectricityBill",
+			        message: "Something went wrong, Not inserted into database.",
+			        error:err
+			    });
+		    }else{
+		    	res.status(200).json({
+			        code: 200,
+			        type: "payElectricityBill",
+			        message: "Phone bill paid successfully.",
+			        result:result
+			    });
+		    }
+		});
+    })
+    .catch(error => {
+        res.status(500).json({
+            code: 500,
+            type: "payElectricityBill",
             message: "Something went wrong.",
             error:error
         });
