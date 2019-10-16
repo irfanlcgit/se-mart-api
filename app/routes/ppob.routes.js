@@ -246,7 +246,7 @@ module.exports = (app) => {
  *         description: Unauthorized
  *     api_key: []
  */
- app.post('/api/pay-electricity-bill', ppob.validate('payPhoneBill'), ppob.payElectricityBill);
+ app.post('/api/pay-electricity-bill', ppob.validate('payElectricityBill'), ppob.payElectricityBill);
 
 // Get a BPJS Payment inquiry
 
