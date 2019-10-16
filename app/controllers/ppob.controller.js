@@ -198,7 +198,7 @@ exports.payPhoneBill = (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).send({
             code: 400,
-            type: "mobileCredit",
+            type: "payPhoneBill",
             message: "Required values are missing.",
             errors: errors.array()
         });
