@@ -265,3 +265,50 @@ exports.payBPJS = (req, res) => {
         });
     });
 };
+
+
+// Create a phone bill
+/**
+ * @swagger
+ * /pay-phone-bill:
+ *  post:
+ *    summary: Pay your mobile credit
+ *    tags:
+ *      - fastpay
+ *    security:
+ *      - bearerAuth: []
+ *  parameters:
+ *    - name: body
+ *      in: body
+ *      description: Body object that needs to be create transection
+ *      required: true
+ *      schema:
+ *        type: object
+ *        required:
+ *          - area_code
+ *          - phone_number
+ *          - ref2
+ *          - nominal
+ *        properties:
+ *          area_code:
+ *            type: string
+ *          phone_number:
+ *            type: string
+ *          nominal:
+ *            type: string
+ *          ref1:
+ *            type: string
+ *            example: ref1 value
+ *          ref2:
+ *            type: string
+ *            example: ref2 value 
+ *  responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Reqired data is missing
+ *      '401':
+ *        description: Unauthorized
+ *  api_key: []
+ */
+// app.post('/api/pay-phone-bill', ppob.validate('payPhoneBill'), ppob.payPhoneBill);

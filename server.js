@@ -37,20 +37,21 @@ const swaggerOptions = {
       contact: {
         name: "Developer",
         email: "link2mirfan@gmail.com"
-      },
-      servers: ["http://localhost:3008"],
-      basePath: '/api'
+      }
     },
-      securityDefinitions: {
+    host: '128.199.170.4:3008',
+    basePath: '/api',
+    securityDefinitions: {
         bearerAuth: {
           type: 'apiKey',
           name: 'Authorization',
           scheme: 'bearer',
           in: 'header',
         },
-      },
+    },
   },
-  apis: ['app/routes/*.js']
+  apis: ['app/routes/*.js'],
+  basePath: '/api'
   //apis: ["server.js"]
 };
 
