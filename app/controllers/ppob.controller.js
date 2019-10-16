@@ -8,7 +8,7 @@ exports.validate = (method) => {
 	if(method === 'mobileCredit'){
 		return [ 
         	body('kode_produk', 'kode_produk doesn\'t exists').not().isEmpty(),
-        	body('no_hp', 'kode_produk doesn\'t exists').not().isEmpty()
+        	body('phone_number', 'phone_number doesn\'t exists').not().isEmpty()
        ] 
 	}
 	if(method === 'payPhoneBill'){
@@ -82,7 +82,7 @@ exports.mobileCredit = (req, res) => {
         "uid": API_UID,
         "pin": API_PIN,
         "kode_produk": req.body.kode_produk,
-        "no_hp": req.body.no_hp,
+        "no_hp": req.body.phone_number,
         "ref1": req.body.ref1,
     };
 

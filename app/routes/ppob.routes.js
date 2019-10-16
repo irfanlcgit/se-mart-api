@@ -49,12 +49,12 @@ module.exports = (app) => {
  *           type: object
  *           required:
  *            - kode_produk
- *            - no_hp
+ *            - phone_number
  *           properties:
  *            kode_produk:
  *              type: string
  *              example: I10H
- *            no_hp:
+ *            phone_number:
  *              type: string
  *              example: 085648889293
  *            ref1:
