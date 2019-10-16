@@ -46,11 +46,6 @@ exports.pricelistCredit = (req, res) => {
     .then(response => {
         var result = response.data;
 
-        var new_transection = new Transection({
-        	Type: "pricelistCredit",
-        	response: result
-        });
-
         res.status(200).json({
             code: 200,
             type: "pricelistCredit",
@@ -61,7 +56,7 @@ exports.pricelistCredit = (req, res) => {
     .catch(error => {
         res.status(500).json({
             code: 500,
-            type: "mobileCredit",
+            type: "pricelistCredit",
             message: "Something went wrong.",
             error:error
         });

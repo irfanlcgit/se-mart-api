@@ -11,6 +11,23 @@ module.exports = (app) => {
  *      - fastpay
  *    security:
  *      - bearerAuth: []
+ *  parameters:
+ *    - name: body
+ *      in: body
+ *      description: Body object that needs to be create transection
+ *      required: true
+ *      schema:
+ *        type: object
+ *        properties:
+ *          kode_produk:
+ *            type: string
+ *            example: I10H
+ *          no_hp:
+ *            type: string
+ *            example: 085648889293
+ *          ref1:
+ *            type: string
+ *            example: ref1 value 
  *  responses:
  *      '200':
  *        description: A successful response
@@ -20,7 +37,7 @@ module.exports = (app) => {
  *        description: Unauthorized
  *  api_key: []
  */
- app.post('/api/mobile-credit-pricelist', ppob.pricelistCredit);
+ app.get('/api/mobile-credit-pricelist', ppob.pricelistCredit);
 
 // Create a new mobile credit
 /**
