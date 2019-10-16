@@ -367,7 +367,7 @@ exports.payElectricityBill = (req, res) => {
 		    	res.status(200).json({
 			        code: 200,
 			        type: "payElectricityBill",
-			        message: "Phone bill paid successfully.",
+			        message: "Electricity bill paid successfully.",
 			        result:result
 			    });
 		    }
