@@ -54,6 +54,17 @@ exports.validate = (method) => {
         	body('ref2', 'ref2 doesn\'t exists').not().isEmpty()
        ]
 	}
+	if(method === 'transactionData'){
+		return [ 
+        	body('tgl1', 'tgl1 doesn\'t exists').not().isEmpty(),
+        	body('tgl2', 'tgl2 doesn\'t exists').not().isEmpty()
+       ]
+	}
+	if(method === 'statusCheck'){
+		return [ 
+        	body('kode_produk', 'kode_produk doesn\'t exists').not().isEmpty()
+       ] 
+	}
 }
 
 
@@ -495,6 +506,103 @@ exports.payBPJS = (req, res) => {
     });
 };
 
+//TRANSACTION DATA
+exports.transactionData = (req, res) => {
+
+	const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+
+    if (!errors.isEmpty()) {
+        return res.status(400).send({
+            code: 400,
+            type: "transactionData",
+            message: "Required values are missing.",
+            errors: errors.array()
+        });
+    }
+
+    var postBody = {
+        "method": "fastpay.datatransaksi",
+        "uid": API_UID,
+        "pin": API_PIN,
+        "kode_produk": req.body.kode_produk,
+        "idpel": req.body.idpel,
+        "id_transaksi" : req.body.id_transaksi,
+        "tgl1" : req.body.tgl1,
+        "tgl2" : req.body.tgl2,
+        "limit" : req.body.limit
+    }
+
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+
+        res.status(200).json({
+            code: 200,
+            type: "transactionData",
+            message: "Transaction status get success",
+            result:result
+        });
+    })
+    .catch(error => {
+        res.status(500).json({
+            code: 500,
+            type: "transactionData",
+            message: "Something went wrong.",
+            error:error
+        });
+    });
+
+};
+
+
+//STATUS CHECK
+exports.statusCheck = (req, res) => {
+
+	const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+
+    if (!errors.isEmpty()) {
+        return res.status(400).send({
+            code: 400,
+            type: "statusCheck",
+            message: "Required values are missing.",
+            errors: errors.array()
+        });
+    }
+
+    var postBody = {
+        "method": "fastpay.cekstatus",
+        "uid": API_UID,
+        "pin": API_PIN,
+        "kode_produk": req.body.kode_produk,
+        "idpel1": req.body.idpel1,
+        "idpel2": req.body.idpel2,
+        "tgl" : req.body.tgl,
+        "ref1": req.body.ref1,
+        "ref2": req.body.ref2,
+        "denom" : req.body.denom
+    }
+
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+
+        res.status(200).json({
+            code: 200,
+            type: "statusCheck",
+            message: "Transaction status get success",
+            result:result
+        });
+    })
+    .catch(error => {
+        res.status(500).json({
+            code: 500,
+            type: "statusCheck",
+            message: "Something went wrong.",
+            error:error
+        });
+    });
+
+};
 
 // Get remaining balance
 exports.balanceCheck = (req, res) => {

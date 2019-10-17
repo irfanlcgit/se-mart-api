@@ -1,5 +1,5 @@
 module.exports = (app) => {
-    const ppob = require('../controllers/ppob.controller.js');
+ const ppob = require('../controllers/ppob.controller.js');
 
 // Get mobile credit pricelist
 
@@ -12,7 +12,7 @@ module.exports = (app) => {
  *     tags:
  *      - fastpay 
  *     security:
- *      - bearerAuth: [] 
+ *      - ApiKeyAuth: [] 
  *     produces:
  *      - application/json
  *     parameters:
@@ -28,7 +28,7 @@ module.exports = (app) => {
  *         description: Reqired data is missing
  *       401:
  *         description: Unauthorized
- *     api_key: []
+ *     api_key: ["dfsddfsdfsdf"]
  */
 
  app.get('/api/pricelist/:produk', ppob.pricelistCredit);
@@ -43,7 +43,7 @@ module.exports = (app) => {
  *     tags:
  *      - fastpay 
  *     security:
- *      - bearerAuth: [] 
+ *      - ApiKeyAuth: [] 
  *     produces:
  *      - application/json
  *     parameters:
@@ -77,7 +77,6 @@ module.exports = (app) => {
  */
  app.post('/api/mobile-credit', ppob.validate('mobileCredit'), ppob.mobileCredit);
 
-
 // Get phone inquiry
 /**
  * @swagger
@@ -87,7 +86,7 @@ module.exports = (app) => {
  *     tags:
  *      - fastpay 
  *     security:
- *      - bearerAuth: [] 
+ *      - ApiKeyAuth: [] 
  *     produces:
  *      - application/json
  *     parameters:
@@ -116,8 +115,6 @@ module.exports = (app) => {
  */
  app.post('/api/phone-inq', ppob.validate('inquiryPhone'), ppob.inquiryPhone);
 
-
-
 // Pay phone bill
 /**
  * @swagger
@@ -127,7 +124,7 @@ module.exports = (app) => {
  *     tags:
  *      - fastpay 
  *     security:
- *      - bearerAuth: [] 
+ *      - ApiKeyAuth: [] 
  *     produces:
  *      - application/json
  *     parameters:
@@ -175,7 +172,7 @@ module.exports = (app) => {
  *     tags:
  *      - fastpay 
  *     security:
- *      - bearerAuth: [] 
+ *      - ApiKeyAuth: [] 
  *     produces:
  *      - application/json
  *     parameters:
@@ -201,8 +198,6 @@ module.exports = (app) => {
  */
  app.post('/api/electricity-inq', ppob.validate('inquiryElectricity'), ppob.inquiryElectricity);
 
-
-
 // Pay Electricity bill
 /**
  * @swagger
@@ -212,7 +207,7 @@ module.exports = (app) => {
  *     tags:
  *      - fastpay 
  *     security:
- *      - bearerAuth: [] 
+ *      - ApiKeyAuth: [] 
  *     produces:
  *      - application/json
  *     parameters:
@@ -258,7 +253,7 @@ module.exports = (app) => {
  *     tags:
  *      - fastpay 
  *     security:
- *      - bearerAuth: [] 
+ *      - ApiKeyAuth: [] 
  *     produces:
  *      - application/json
  *     parameters:
@@ -295,6 +290,7 @@ module.exports = (app) => {
  */
  
  app.post('/api/inq-bpjs', ppob.validate('bpjsInquiry'), ppob.bpjsInquiry);
+
 // Create a BPJS Payment
 
 /**
@@ -305,7 +301,7 @@ module.exports = (app) => {
  *     tags:
  *      - fastpay 
  *     security:
- *      - bearerAuth: [] 
+ *      - ApiKeyAuth: [] 
  *     produces:
  *      - application/json
  *     parameters:
@@ -351,6 +347,101 @@ module.exports = (app) => {
  
  app.post('/api/pay-bpjs', ppob.validate('payBPJS'), ppob.payBPJS);
 
+// Get a transaction Data
+
+/**
+ * @swagger
+ * /transaction-data:
+ *   post:
+ *     summary: get your transaction data
+ *     tags:
+ *      - fastpay 
+ *     security:
+ *      - ApiKeyAuth: [] 
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         description: Body object that needs to be create transection
+ *         required: true
+ *         schema:
+ *           type: object
+ *           required:
+ *             - tgl1
+ *             - tgl2
+ *           properties:
+ *             kode_produk:
+ *               type: string
+ *             idpel:
+ *               type: string
+ *             id_transaksi:
+ *               type: string
+ *             tgl1:
+ *               type: string
+ *             tgl2:
+ *               type: string
+ *             limit:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: A successful response
+ *       400:
+ *         description: Reqired data is missing
+ *       401:
+ *         description: Unauthorized
+ *     api_key: []
+ */
+ app.post('/api/transaction-data', ppob.validate('transactionData'), ppob.transactionData);
+
+ // Status Check
+
+/**
+ * @swagger
+ * /status-check:
+ *   post:
+ *     summary: Check transaction status
+ *     tags:
+ *      - fastpay 
+ *     security:
+ *      - ApiKeyAuth: [] 
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         description: Body object that needs to be create transection
+ *         required: true
+ *         schema:
+ *           type: object
+ *           required:
+ *             - kode_produk
+ *           properties:
+ *             kode_produk:
+ *               type: string
+ *             idpel1:
+ *               type: string
+ *             idpel2:
+ *               type: string
+ *             tgl:
+ *               type: string
+ *             ref1:
+ *               type: string
+ *             ref2:
+ *               type: string
+ *             denom:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: A successful response
+ *       400:
+ *         description: Reqired data is missing
+ *       401:
+ *         description: Unauthorized
+ *     api_key: []
+ */
+ 
+ app.post('/api/status-check', ppob.validate('statusCheck'), ppob.statusCheck);
 
 // Get remaining balance
 
@@ -363,7 +454,7 @@ module.exports = (app) => {
  *     tags:
  *      - fastpay 
  *     security:
- *      - bearerAuth: [] 
+ *      - ApiKeyAuth: [] 
  *     produces:
  *      - application/json
  *     responses:

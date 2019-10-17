@@ -42,16 +42,14 @@ const swaggerOptions = {
     host: '128.199.170.4:3008',
     basePath: '/api',
     securityDefinitions: {
-        bearerAuth: {
+        ApiKeyAuth: {
           type: 'apiKey',
-          name: 'Authorization',
-          scheme: 'bearer',
+          name: 'x-api-key',
           in: 'header',
         },
     },
   },
-  apis: ['app/routes/*.js'],
-  basePath: '/api'
+  apis: ['app/routes/*.js']
   //apis: ["server.js"]
 };
 
