@@ -524,12 +524,8 @@ exports.transactionData = (req, res) => {
         "method": "fastpay.datatransaksi",
         "uid": API_UID,
         "pin": API_PIN,
-        "kode_produk": req.body.kode_produk,
-        "idpel": req.body.idpel,
-        "id_transaksi" : req.body.id_transaksi,
         "tgl1" : req.body.tgl1,
-        "tgl2" : req.body.tgl2,
-        "limit" : req.body.limit
+        "tgl2" : req.body.tgl2
     }
 
     axios.post(API_URL, postBody)
