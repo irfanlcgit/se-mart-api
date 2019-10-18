@@ -10,7 +10,7 @@ module.exports = (app) => {
  *     summary: Get mobile credit price list
  *     description: Returns mobile credit price list
  *     tags:
- *      - fastpay 
+ *      - Android 
  *     security:
  *      - ApiKeyAuth: [] 
  *     produces:
@@ -41,7 +41,7 @@ module.exports = (app) => {
  *   post:
  *     summary: Pay your mobile credit
  *     tags:
- *      - fastpay 
+ *      - Android 
  *     security:
  *      - ApiKeyAuth: [] 
  *     produces:
@@ -84,7 +84,7 @@ module.exports = (app) => {
  *   post:
  *     summary: Get your Phone Inquiry
  *     tags:
- *      - fastpay 
+ *      - Android 
  *     security:
  *      - ApiKeyAuth: [] 
  *     produces:
@@ -122,7 +122,7 @@ module.exports = (app) => {
  *   post:
  *     summary: Pay your Phone Bill
  *     tags:
- *      - fastpay 
+ *      - Android 
  *     security:
  *      - ApiKeyAuth: [] 
  *     produces:
@@ -170,7 +170,7 @@ module.exports = (app) => {
  *   post:
  *     summary: Get your Electricity Inquiry
  *     tags:
- *      - fastpay 
+ *      - Android 
  *     security:
  *      - ApiKeyAuth: [] 
  *     produces:
@@ -205,7 +205,7 @@ module.exports = (app) => {
  *   post:
  *     summary: Pay your Electricity Bill
  *     tags:
- *      - fastpay 
+ *      - Android 
  *     security:
  *      - ApiKeyAuth: [] 
  *     produces:
@@ -251,7 +251,7 @@ module.exports = (app) => {
  *   post:
  *     summary: Get your PBJS Inquiry
  *     tags:
- *      - fastpay 
+ *      - Android 
  *     security:
  *      - ApiKeyAuth: [] 
  *     produces:
@@ -299,7 +299,7 @@ module.exports = (app) => {
  *   post:
  *     summary: Pay your PBJS
  *     tags:
- *      - fastpay 
+ *      - Android 
  *     security:
  *      - ApiKeyAuth: [] 
  *     produces:
@@ -355,7 +355,7 @@ module.exports = (app) => {
  *   post:
  *     summary: get your transaction data
  *     tags:
- *      - fastpay 
+ *      - dashboard 
  *     security:
  *      - ApiKeyAuth: [] 
  *     produces:
@@ -402,7 +402,7 @@ module.exports = (app) => {
  *   post:
  *     summary: Check transaction status
  *     tags:
- *      - fastpay 
+ *      - dashboard 
  *     security:
  *      - ApiKeyAuth: [] 
  *     produces:
@@ -452,7 +452,7 @@ module.exports = (app) => {
  *     summary: Get remaining balance
  *     description: Returns remaining balance
  *     tags:
- *      - fastpay 
+ *      - Android 
  *     security:
  *      - ApiKeyAuth: [] 
  *     produces:
