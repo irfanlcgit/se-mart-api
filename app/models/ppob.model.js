@@ -33,7 +33,7 @@ Transection.createTransection = function (newTransection, result) {
 
 Transection.getTransections = function (transectionData, result) {
 
-        sql.query("SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name=?", [transectionData.bill], function (err, res) {
+        sql.query("SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name='"+transectionData.bill+"'", function (err, res) {
             if(err) {
                 //console.log("error: ", err);
                 result(err.sqlMessage, null);

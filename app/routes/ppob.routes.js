@@ -389,7 +389,7 @@ module.exports = (app) => {
  *     produces:
  *      - application/json
  *     parameters:
- *       - name: produk
+ *       - name: bill
  *         in: path
  *         description: Credits | Data | PLN | BPJS | TELEPHONE code for return transaction type
  *         required: true
