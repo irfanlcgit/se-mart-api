@@ -399,7 +399,7 @@ module.exports = (app) => {
  *         description: Unauthorized
  *     api_key: []
  */
- app.get('/api/get-transactions', ppob.getTransactions);
+ app.get('/api/get-transactions/:produk', ppob.getTransactions);
 
 // Get remaining balance
 
