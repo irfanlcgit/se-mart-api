@@ -600,7 +600,7 @@ exports.getTransactions = (req, res) => {
     }
 
     var transectionData = {
-        product_code: req.params.produk
+        bill: req.params.bill
     }
 
 

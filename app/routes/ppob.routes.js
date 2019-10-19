@@ -292,10 +292,10 @@ module.exports = (app) => {
  *               type: string
  *             customer_id:
  *               type: string
- *               example: 8888801821212256
+ *               example: "8888801821212256"
  *             periode:
  *               type: string
- *               example: 12
+ *               example: "12"
  *             ref1:
  *               type: string
  *               example: ref1 value
@@ -334,6 +334,7 @@ module.exports = (app) => {
  *           required:
  *             - kode_produk
  *             - customer_id
+ *             - nominal
  *             - periode
  *             - ref2
  *             - phone_number
@@ -343,10 +344,13 @@ module.exports = (app) => {
  *               type: string
  *             customer_id:
  *               type: string
- *               example: 8888801821212256
+ *               example: "8888801821212256"
+ *             nominal:
+ *               type: string
+ *               example: "0"
  *             periode:
  *               type: string
- *               example: 12
+ *               example: "12"
  *             ref1:
  *               type: string
  *               example: ref1 value
@@ -355,7 +359,7 @@ module.exports = (app) => {
  *               example: ref2 value
  *             phone_number:
  *               type: string
- *               example: 085648889293 
+ *               example: "085648889293" 
  *             payment_method:
  *               type: string
  *               example: cashwallet 
@@ -375,7 +379,7 @@ module.exports = (app) => {
 
 /**
  * @swagger
- * /get-transactions/{produk}:
+ * /get-transactions/{bill}:
  *   get:
  *     summary: get your transactions data by date
  *     tags:
@@ -387,7 +391,7 @@ module.exports = (app) => {
  *     parameters:
  *       - name: produk
  *         in: path
- *         description: TELEPON | PLNNONH code for return transaction type
+ *         description: Credits | Data | PLN | BPJS | TELEPHONE code for return transaction type
  *         required: true
  *         type: string
  *     responses:
@@ -399,7 +403,7 @@ module.exports = (app) => {
  *         description: Unauthorized
  *     api_key: []
  */
- app.get('/api/get-transactions/:produk', ppob.getTransactions);
+ app.get('/api/get-transactions/:bill', ppob.getTransactions);
 
 // Get remaining balance
 
