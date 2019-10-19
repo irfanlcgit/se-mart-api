@@ -3,6 +3,8 @@ const Transection = require('../models/ppob.model.js');
 const axios = require('axios');
 const {API_URL, API_UID, API_PIN} = process.env;
 const { body, validationResult } = require('express-validator/check');
+const uniqueRandom = require('unique-random');
+const random = uniqueRandom(1, 10000000000);
 
 exports.validate = (method) => {
 	if(method === 'mobileCredit'){
@@ -255,8 +257,13 @@ exports.payPhoneBill = (req, res) => {
     }
 
 
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+        if(result.status === "00"){
+
             var new_transection = new Transection({
-                    order_id: "32323199",
+                    order_id: random(),
                     bill_id: 5,
                     product_code: "TELEPON",
                     area_code: req.body.area_code,
@@ -266,20 +273,37 @@ exports.payPhoneBill = (req, res) => {
                     payment_method: req.body.payment_method,
                     value: null, 
                     price: req.body.nominal,
-                    charge: "4343434",
-                    profit: 32323,
-                    trx_status: "OK"
+                    charge: result.saldoterpotong,
+                    profit: req.body.nominal - result.saldoterpotong,
+                    trx_status: result.keterangan
                 });
-res.status(200).json({
-            code: 200,
-            type: "payPhoneBill",
-            message: "Something went wrong. hggh",
-            error:new_transection
-        });
+                Transection.createTransection(new_transection, function(err, transection) {
+            
+                if (err){
+                    res.status(500).json({
+                        code: 500,
+                        type: "payPhoneBill",
+                        message: "Something went wrong, Not inserted into database.",
+                        error:err
+                    });
+                }else{
+                    res.status(200).json({
+                        code: 200,
+                        type: "payPhoneBill",
+                        message: "Phone bill paid successfully.",
+                        result:result
+                    });
+                }
+            });
+        }else{
+            res.status(500).json({
+                code: 500,
+                type: "payPhoneBill",
+                message: "Something went wrong, Not inserted into database.",
+                error:result
+            });
 
-    axios.post(API_URL, postBody)
-    .then(response => {
-        var result = response.data;
+        }
         
     })
     .catch(error => {
@@ -374,7 +398,7 @@ exports.payElectricityBill = (req, res) => {
         if(result.status === "00"){
 
             var new_transection = new Transection({
-                    order_id: "323231",
+                    order_id: random(),
                     bill_id: 3,
                     product_code: "PLNNONH",
                     area_code: null,
@@ -507,7 +531,7 @@ exports.payBPJS = (req, res) => {
         if(result.status === "00"){
 
             var new_transection = new Transection({
-                    order_id: "323231",
+                    order_id: random(),
                     bill_id: 4,
                     product_code: req.body.kode_produk,
                     area_code: null,
