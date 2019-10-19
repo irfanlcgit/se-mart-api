@@ -603,13 +603,6 @@ exports.getTransactions = (req, res) => {
         product_code: req.params.produk
     }
 
-    res.status(200).json({
-                code: 200,
-                type: "getTransaction",
-                message: "Get transactions successfully.",
-                result:transectionData
-            })
-
 
     Transection.getTransections( transectionData, function(err, transections) {
             
