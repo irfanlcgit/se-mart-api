@@ -375,8 +375,8 @@ module.exports = (app) => {
 
 /**
  * @swagger
- * /get-transactions:
- *   post:
+ * /get-transactions/{produk}:
+ *   get:
  *     summary: get your transactions data by date
  *     tags:
  *      - dashboard 
@@ -385,24 +385,11 @@ module.exports = (app) => {
  *     produces:
  *      - application/json
  *     parameters:
- *       - name: body
- *         in: body
- *         description: Body object that needs to be create transection
+ *       - name: produk
+ *         in: path
+ *         description: TELEPON | PLNNONH code for return transaction type
  *         required: true
- *         schema:
- *           type: object
- *           required:
- *             - fromDate
- *             - toDate
- *           properties:
- *             fromDate:
- *               type: string
- *               example: 17/10/2019
- *             toDate:
- *               type: string
- *               example: 20/10/2019
- *             orderId:
- *               type: string
+ *         type: string
  *     responses:
  *       200:
  *         description: A successful response
@@ -412,7 +399,7 @@ module.exports = (app) => {
  *         description: Unauthorized
  *     api_key: []
  */
- app.post('/api/get-transactions', ppob.getTransactions);
+ app.get('/api/get-transactions', ppob.getTransactions);
 
 // Get remaining balance
 

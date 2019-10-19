@@ -32,9 +32,8 @@ Transection.createTransection = function (newTransection, result) {
 };
 
 Transection.getTransections = function (transectionData, result) {
-        var toDate_query = "2019-10-19";
-        var fromDate_query = "2019-10-20";        
-        sql.query("SELECT * FROM transactions WHERE created_at BETWEEN ? AND  ?", [fromDate_query, toDate_query], function (err, res) {
+
+        sql.query("SELECT * FROM transactions WHERE product_code=?", [transectionData.product_code], function (err, res) {
             if(err) {
                 //console.log("error: ", err);
                 result(err.sqlMessage, null);

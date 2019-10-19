@@ -599,17 +599,16 @@ exports.getTransactions = (req, res) => {
         });
     }
 
-    var orderId = false;
-
-    if(req.body.orderId && req.body.orderId !== "string"){
-        orderId = req.body.orderId;
-    }
-
     var transectionData = {
-        fromDate: req.body.fromDate,
-        toDate: req.body.toDate,
-        orderId: orderId
+        product_code: req.params.produk
     }
+
+    res.status(200).json({
+                code: 200,
+                type: "getTransaction",
+                message: "Get transactions successfully.",
+                result:transectionData
+            })
 
 
     Transection.getTransections( transectionData, function(err, transections) {
