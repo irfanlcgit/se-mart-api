@@ -4,7 +4,7 @@ const axios = require('axios');
 const {API_URL, API_UID, API_PIN} = process.env;
 const { body, validationResult } = require('express-validator/check');
 const uniqueRandom = require('unique-random');
-const random = uniqueRandom(1, 10000000000);
+const random = uniqueRandom(1, 100000000);
 
 exports.validate = (method) => {
 	if(method === 'mobileCredit'){
@@ -284,7 +284,8 @@ exports.payPhoneBill = (req, res) => {
                         code: 500,
                         type: "payPhoneBill",
                         message: "Something went wrong, Not inserted into database.",
-                        error:err
+                        error:err,
+                        input: new_transection
                     });
                 }else{
                     res.status(200).json({
