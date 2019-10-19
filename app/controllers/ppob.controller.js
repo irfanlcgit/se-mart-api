@@ -8,7 +8,8 @@ exports.validate = (method) => {
 	if(method === 'mobileCredit'){
 		return [ 
         	body('kode_produk', 'kode_produk doesn\'t exists').not().isEmpty(),
-        	body('phone_number', 'phone_number doesn\'t exists').not().isEmpty()
+            body('phone_number', 'phone_number doesn\'t exists').not().isEmpty(),
+        	body('payment_method', 'payment_method doesn\'t exists').not().isEmpty()
        ] 
 	}
 	if(method === 'inquiryPhone'){
@@ -22,7 +23,8 @@ exports.validate = (method) => {
         	body('area_code', 'area_code doesn\'t exists').not().isEmpty(),
         	body('phone_number', 'phone_number doesn\'t exists').not().isEmpty(),
         	body('nominal', 'nominal doesn\'t exists').not().isEmpty(),
-        	body('ref2', 'ref2 doesn\'t exists').not().isEmpty()
+        	body('ref2', 'ref2 doesn\'t exists').not().isEmpty(),
+            body('payment_method', 'payment_method doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'inquiryElectricity'){
@@ -34,7 +36,8 @@ exports.validate = (method) => {
 		return [ 
         	body('customer_id', 'customer_id doesn\'t exists').not().isEmpty(),
         	body('nominal', 'nominal doesn\'t exists').not().isEmpty(),
-        	body('ref2', 'ref2 doesn\'t exists').not().isEmpty()
+        	body('ref2', 'ref2 doesn\'t exists').not().isEmpty(),
+            body('payment_method', 'payment_method doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'bpjsInquiry'){
@@ -51,7 +54,8 @@ exports.validate = (method) => {
         	body('periode', 'periode doesn\'t exists').not().isEmpty(),
         	body('phone_number', 'phone_number doesn\'t exists').not().isEmpty(),
         	body('nominal', 'nominal doesn\'t exists').not().isEmpty(),
-        	body('ref2', 'ref2 doesn\'t exists').not().isEmpty()
+        	body('ref2', 'ref2 doesn\'t exists').not().isEmpty(),
+            body('payment_method', 'payment_method doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'transactionData'){
@@ -77,7 +81,7 @@ exports.pricelistCredit = async (req, res) => {
         "pin": API_PIN,
         "produk": req.params.produk
     };
-    
+
  	res.status(200).json({
             code: 200,
             type: "pricelistCredit",
@@ -252,30 +256,50 @@ exports.payPhoneBill = (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-        
-        var new_transection = new Transection({
-        	Type: "payPhoneBill",
-        	response: result
-        });
+        if(result.status === "00"){
 
-        Transection.createTransection(new_transection, function(err, transection) {
+	        var new_transection = new Transection({
+					order_id: "32323",
+					bill_id: 5,
+					product_code: "TELEPON",
+					area_code: req.body.area_code,
+					phone: req.body.phone_number,
+					customer_id: null,
+					period: null,
+					payment_method: req.body.payment_method,
+					value: null, 
+					price: req.body.nominal,
+					charge: result.saldoterpotong,
+					profit: req.body.nominal - result.saldoterpotong,
+					trx_status: result.keterangan
+	        	});
+	        	Transection.createTransection(new_transection, function(err, transection) {
 		    
-		    if (err){
-		      	res.status(500).json({
-			        code: 500,
-			        type: "payPhoneBill",
-			        message: "Something went wrong, Not inserted into database.",
-			        error:err
-			    });
-		    }else{
-		    	res.status(200).json({
-			        code: 200,
-			        type: "payPhoneBill",
-			        message: "Phone bill paid successfully.",
-			        result:result
-			    });
-		    }
-		});
+			    if (err){
+			      	res.status(500).json({
+				        code: 500,
+				        type: "payPhoneBill",
+				        message: "Something went wrong, Not inserted into database.",
+				        error:err
+				    });
+			    }else{
+			    	res.status(200).json({
+				        code: 200,
+				        type: "payPhoneBill",
+				        message: "Phone bill paid successfully.",
+				        result:result
+				    });
+			    }
+			});
+    	}else{
+    		res.status(500).json({
+				code: 500,
+				type: "payPhoneBill",
+				message: "Something went wrong, Not inserted into database.",
+				error:result
+			});
+
+    	}
     })
     .catch(error => {
         res.status(500).json({
@@ -366,30 +390,51 @@ exports.payElectricityBill = (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-        
-        var new_transection = new Transection({
-        	Type: "payElectricityBill",
-        	response: result
-        });
+        if(result.status === "00"){
 
-        Transection.createTransection(new_transection, function(err, transection) {
-		    
-		    if (err){
-		      	res.status(500).json({
-			        code: 500,
-			        type: "payElectricityBill",
-			        message: "Something went wrong, Not inserted into database.",
-			        error:err
-			    });
-		    }else{
-		    	res.status(200).json({
-			        code: 200,
-			        type: "payElectricityBill",
-			        message: "Electricity bill paid successfully.",
-			        result:result
-			    });
-		    }
-		});
+            var new_transection = new Transection({
+                    order_id: "323231",
+                    bill_id: 3,
+                    product_code: "PLNNONH",
+                    area_code: null,
+                    phone: null,
+                    customer_id: req.body.customer_id,
+                    period: null,
+                    payment_method: req.body.payment_method,
+                    value: null, 
+                    price: req.body.nominal,
+                    charge: result.saldoterpotong,
+                    profit: req.body.nominal - result.saldoterpotong,
+                    trx_status: result.keterangan
+                });
+                Transection.createTransection(new_transection, function(err, transection) {
+            
+                if (err){
+                    res.status(500).json({
+                        code: 500,
+                        type: "payElectricityBill",
+                        message: "Something went wrong, Not inserted into database.",
+                        error:err
+                    });
+                }else{
+                    res.status(200).json({
+                        code: 200,
+                        type: "payElectricityBill",
+                        message: "Phone bill paid successfully.",
+                        result:result
+                    });
+                }
+            });
+        }else{
+            res.status(500).json({
+                code: 500,
+                type: "payElectricityBill",
+                message: "Something went wrong, Not inserted into database.",
+                error:result
+            });
+
+        }
+        
     })
     .catch(error => {
         res.status(500).json({
@@ -478,30 +523,50 @@ exports.payBPJS = (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-        
-        var new_transection = new Transection({
-        	Type: "payBPJS",
-        	response: result
-        });
+        if(result.status === "00"){
 
-        Transection.createTransection(new_transection, function(err, transection) {
-		    
-		    if (err){
-		      	res.status(500).json({
-			        code: 500,
-			        type: "payBPJS",
-			        message: "Something went wrong, Not inserted into database.",
-			        error:err
-			    });
-		    }else{
-		    	res.status(200).json({
-			        code: 200,
-			        type: "payBPJS",
-			        message: "BPJS paid successfully.",
-			        result:result
-			    });
-		    }
-		});
+            var new_transection = new Transection({
+                    order_id: "323231",
+                    bill_id: 4,
+                    product_code: req.body.kode_produk,
+                    area_code: null,
+                    phone: req.body.phone_number,
+                    customer_id: req.body.customer_id,
+                    period: req.body.periode,
+                    payment_method: req.body.payment_method,
+                    value: null, 
+                    price: req.body.nominal,
+                    charge: result.saldoterpotong,
+                    profit: req.body.nominal - result.saldoterpotong,
+                    trx_status: result.keterangan
+                });
+                Transection.createTransection(new_transection, function(err, transection) {
+            
+                if (err){
+                    res.status(500).json({
+                        code: 500,
+                        type: "payBPJS",
+                        message: "Something went wrong, Not inserted into database.",
+                        error:err
+                    });
+                }else{
+                    res.status(200).json({
+                        code: 200,
+                        type: "payBPJS",
+                        message: "Phone bill paid successfully.",
+                        result:result
+                    });
+                }
+            });
+        }else{
+            res.status(500).json({
+                code: 500,
+                type: "payBPJS",
+                message: "Something went wrong, Not inserted into database.",
+                error:result
+            });
+
+        }
     })
     .catch(error => {
         res.status(500).json({
@@ -511,6 +576,42 @@ exports.payBPJS = (req, res) => {
             error:error
         });
     });
+};
+
+
+//GET TRANSACTIONS DATA
+exports.getTransactions = (req, res) => {
+
+    const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+
+    if (!errors.isEmpty()) {
+        return res.status(400).send({
+            code: 400,
+            type: "getTransaction",
+            message: "Required values are missing.",
+            errors: errors.array()
+        });
+    }
+
+    Transection.getTransections( function(err, transections) {
+            
+        if (err){
+            res.status(500).json({
+                code: 500,
+                type: "getTransaction",
+                message: "Something went wrong, Not inserted into database.",
+                error:err
+            });
+        }else{
+            res.status(200).json({
+                code: 200,
+                type: "getTransaction",
+                message: "Get transactions successfully.",
+                result:transections
+            });
+        }
+    });
+
 };
 
 //TRANSACTION DATA

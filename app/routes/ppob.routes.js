@@ -56,6 +56,7 @@ module.exports = (app) => {
  *           required:
  *            - kode_produk
  *            - phone_number
+ *            - payment_method
  *           properties:
  *            kode_produk:
  *              type: string
@@ -63,6 +64,9 @@ module.exports = (app) => {
  *            phone_number:
  *              type: string
  *              example: 085648889293
+ *            payment_method:
+ *              type: string
+ *              example: wallet
  *            ref1:
  *              type: string
  *              example: ref1 value 
@@ -139,6 +143,7 @@ module.exports = (app) => {
  *             - phone_number
  *             - ref2
  *             - nominal
+ *             - payment_method
  *           properties:
  *             area_code:
  *               type: string
@@ -152,6 +157,9 @@ module.exports = (app) => {
  *             ref2:
  *               type: string
  *               example: ref2 value
+ *             payment_method:
+ *               type: string
+ *               example: wallet
  *     responses:
  *       200:
  *         description: A successful response
@@ -221,11 +229,15 @@ module.exports = (app) => {
  *             - customer_id
  *             - ref2
  *             - nominal
+ *             - payment_method
  *           properties:
  *             customer_id:
  *               type: string
  *             nominal:
  *               type: string
+ *             payment_method:
+ *               type: string
+ *               example: cash
  *             ref1:
  *               type: string
  *               example: ref1 value
@@ -317,6 +329,7 @@ module.exports = (app) => {
  *             - periode
  *             - ref2
  *             - phone_number
+ *             - payment_method
  *           properties:
  *             kode_produk:
  *               type: string
@@ -335,6 +348,9 @@ module.exports = (app) => {
  *             phone_number:
  *               type: string
  *               example: 085648889293 
+ *             payment_method:
+ *               type: string
+ *               example: cashwallet 
  *     responses:
  *       200:
  *         description: A successful response
@@ -347,13 +363,13 @@ module.exports = (app) => {
  
  app.post('/api/pay-bpjs', ppob.validate('payBPJS'), ppob.payBPJS);
 
-// Get a transaction Data
+// Get a transactions Data
 
 /**
  * @swagger
- * /transaction-data:
+ * /get-transactions:
  *   post:
- *     summary: get your transaction data
+ *     summary: get your transactions data by date
  *     tags:
  *      - dashboard 
  *     security:
@@ -368,20 +384,16 @@ module.exports = (app) => {
  *         schema:
  *           type: object
  *           required:
- *             - tgl1
- *             - tgl2
+ *             - start_date
+ *             - end_date
  *           properties:
- *             kode_produk:
+ *             start_date:
  *               type: string
- *             idpel:
+ *               example: 17/10/2019
+ *             end_date:
  *               type: string
- *             id_transaksi:
- *               type: string
- *             tgl1:
- *               type: string
- *             tgl2:
- *               type: string
- *             limit:
+ *               example: 20/10/2019
+ *             order_id:
  *               type: string
  *     responses:
  *       200:
@@ -392,56 +404,7 @@ module.exports = (app) => {
  *         description: Unauthorized
  *     api_key: []
  */
- app.post('/api/transaction-data', ppob.validate('transactionData'), ppob.transactionData);
-
- // Status Check
-
-/**
- * @swagger
- * /status-check:
- *   post:
- *     summary: Check transaction status
- *     tags:
- *      - dashboard 
- *     security:
- *      - ApiKeyAuth: [] 
- *     produces:
- *      - application/json
- *     parameters:
- *       - name: body
- *         in: body
- *         description: Body object that needs to be create transection
- *         required: true
- *         schema:
- *           type: object
- *           required:
- *             - kode_produk
- *           properties:
- *             kode_produk:
- *               type: string
- *             idpel1:
- *               type: string
- *             idpel2:
- *               type: string
- *             tgl:
- *               type: string
- *             ref1:
- *               type: string
- *             ref2:
- *               type: string
- *             denom:
- *               type: string
- *     responses:
- *       200:
- *         description: A successful response
- *       400:
- *         description: Reqired data is missing
- *       401:
- *         description: Unauthorized
- *     api_key: []
- */
- 
- app.post('/api/status-check', ppob.validate('statusCheck'), ppob.statusCheck);
+ app.post('/api/get-transactions', ppob.getTransactions);
 
 // Get remaining balance
 
