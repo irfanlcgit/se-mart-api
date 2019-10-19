@@ -203,6 +203,8 @@ exports.inquiryPhone = (req, res) => {
     	"idpel3": ""
     };
 
+
+
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
@@ -253,41 +255,32 @@ exports.payPhoneBill = (req, res) => {
     }
 
 
+            var new_transection = new Transection({
+                    order_id: "32323199",
+                    bill_id: 5,
+                    product_code: "TELEPON",
+                    area_code: req.body.area_code,
+                    phone: req.body.phone_number,
+                    customer_id: req.body.customer_id,
+                    period: null,
+                    payment_method: req.body.payment_method,
+                    value: null, 
+                    price: req.body.nominal,
+                    charge: "4343434",
+                    profit: 32323,
+                    trx_status: "OK"
+                });
+res.status(200).json({
+            code: 200,
+            type: "payPhoneBill",
+            message: "Something went wrong. hggh",
+            error:new_transection
+        });
+
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-        if(result.status === "00"){
-
-	        var new_transection = new Transection({
-					order_id: "32323",
-					bill_id: 5,
-					product_code: "TELEPON",
-					area_code: req.body.area_code,
-					phone: req.body.phone_number,
-					customer_id: null,
-					period: null,
-					payment_method: req.body.payment_method,
-					value: null, 
-					price: req.body.nominal,
-					charge: result.saldoterpotong,
-					profit: req.body.nominal - result.saldoterpotong,
-					trx_status: result.keterangan
-	        	});
-	        	res.status(200).json({
-                        code: 200,
-                        type: "payPhoneBill",
-                        message: "Phone bill paid successfully.",
-                        result:result
-                    });
-    	}else{
-    		res.status(500).json({
-				code: 500,
-				type: "payPhoneBill",
-				message: "Something went wrong, Not inserted into database.",
-				error:result
-			});
-
-    	}
+        
     })
     .catch(error => {
         res.status(500).json({

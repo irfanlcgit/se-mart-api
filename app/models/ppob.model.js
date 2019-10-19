@@ -1,19 +1,19 @@
 var sql = require('./db.js');
 //Transection object constructor
 var Transection = function(transection){
-    this.order_id =  order_id;
-    this.bill_id =  bill_id;
-    this.product_code =  product_code;
-    this.area_code =  area_code;
-    this.phone =  phone;
-    this.customer_id =  customer_id;
-    this.period =  period;
-    this.payment_method =  payment_method;
-    this.value =  value; 
-    this.price =  price;
-    this.charge =  charge;
-    this.profit =  profit;
-    this.trx_status =  trx_status;
+    this.order_id =  transection.order_id;
+    this.bill_id =  transection.bill_id;
+    this.product_code =  transection.product_code;
+    this.area_code =  transection.area_code;
+    this.phone =  transection.phone;
+    this.customer_id =  transection.customer_id;
+    this.period =  transection.period;
+    this.payment_method =  transection.payment_method;
+    this.value =  transection.value; 
+    this.price =  transection.price;
+    this.charge =  transection.charge;
+    this.profit =  transection.profit;
+    this.trx_status =  transection.trx_status;
     this.created_at = new Date();
     this.updated_at = null;
 };

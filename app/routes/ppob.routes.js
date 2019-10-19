@@ -200,6 +200,7 @@ module.exports = (app) => {
  *           properties:
  *             customer_id:
  *               type: string
+ *               example: "5392112011703"  
  *     responses:
  *       200:
  *         description: A successful response
@@ -238,8 +239,10 @@ module.exports = (app) => {
  *           properties:
  *             customer_id:
  *               type: string
+ *               example: "5392112011703"
  *             nominal:
  *               type: string
+ *               example: "698000"
  *             payment_method:
  *               type: string
  *               example: cash
