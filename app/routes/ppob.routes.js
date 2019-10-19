@@ -148,8 +148,7 @@ module.exports = (app) => {
  *             - payment_method
  *           properties:
  *             area_code:
- *               type: string
- *               example: 021
+ *               type: 021
  *             phone_number:
  *               type: string
  *               example: 88393209
