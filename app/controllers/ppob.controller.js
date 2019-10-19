@@ -273,24 +273,12 @@ exports.payPhoneBill = (req, res) => {
 					profit: req.body.nominal - result.saldoterpotong,
 					trx_status: result.keterangan
 	        	});
-	        	Transection.createTransection(new_transection, function(err, transection) {
-		    
-			    if (err){
-			      	res.status(500).json({
-				        code: 500,
-				        type: "payPhoneBill",
-				        message: "Something went wrong, Not inserted into database.",
-				        error:err
-				    });
-			    }else{
-			    	res.status(200).json({
-				        code: 200,
-				        type: "payPhoneBill",
-				        message: "Phone bill paid successfully.",
-				        result:result
-				    });
-			    }
-			});
+	        	res.status(200).json({
+                        code: 200,
+                        type: "payPhoneBill",
+                        message: "Phone bill paid successfully.",
+                        result:result
+                    });
     	}else{
     		res.status(500).json({
 				code: 500,
