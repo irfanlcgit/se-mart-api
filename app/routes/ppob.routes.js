@@ -106,8 +106,10 @@ module.exports = (app) => {
  *           properties:
  *             area_code:
  *               type: string
+ *               example: 021
  *             phone_number:
  *               type: string
+ *               example: 88393209
  *     responses:
  *       200:
  *         description: A successful response
@@ -147,10 +149,13 @@ module.exports = (app) => {
  *           properties:
  *             area_code:
  *               type: string
+ *               example: 021
  *             phone_number:
  *               type: string
+ *               example: 88393209
  *             nominal:
  *               type: string
+ *               example: 137580
  *             ref1:
  *               type: string
  *               example: ref1 value
