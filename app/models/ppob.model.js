@@ -31,8 +31,10 @@ Transection.createTransection = function (newTransection, result) {
         });           
 };
 
-Transection.getTransections = function (result) {    
-        sql.query("SELECT * FROM transactions", function (err, res) {
+Transection.getTransections = function (transectionData, result) {
+        var toDate_query = transectionData.toDate;
+        var fromDate_query = transectionData.fromDate;        
+        sql.query("SELECT * FROM transactions WHERE created_at BETWEEN ? AND  ?", [fromDate_query, toDate_query], function (err, res) {
             if(err) {
                 //console.log("error: ", err);
                 result(err.sqlMessage, null);

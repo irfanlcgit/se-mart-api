@@ -392,16 +392,16 @@ module.exports = (app) => {
  *         schema:
  *           type: object
  *           required:
- *             - start_date
- *             - end_date
+ *             - fromDate
+ *             - toDate
  *           properties:
- *             start_date:
+ *             fromDate:
  *               type: string
  *               example: 17/10/2019
- *             end_date:
+ *             toDate:
  *               type: string
  *               example: 20/10/2019
- *             order_id:
+ *             orderId:
  *               type: string
  *     responses:
  *       200:

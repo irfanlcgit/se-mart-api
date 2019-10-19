@@ -40,7 +40,7 @@ const swaggerOptions = {
         email: "link2mirfan@gmail.com"
       }
     },
-    host: '128.199.170.4:3008',
+    host: 'localhost:3008',
     basePath: '/api',
     securityDefinitions: {
         ApiKeyAuth: {

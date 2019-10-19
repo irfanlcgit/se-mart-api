@@ -599,7 +599,20 @@ exports.getTransactions = (req, res) => {
         });
     }
 
-    Transection.getTransections( function(err, transections) {
+    var orderId = false;
+
+    if(req.body.orderId && req.body.orderId !== "string"){
+        orderId = req.body.orderId;
+    }
+
+    var transectionData = {
+        fromDate: req.body.fromDate,
+        toDate: req.body.toDate,
+        orderId: orderId
+    }
+
+
+    Transection.getTransections( transectionData, function(err, transections) {
             
         if (err){
             res.status(500).json({
