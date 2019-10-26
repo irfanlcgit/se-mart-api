@@ -31,15 +31,57 @@ Transection.createTransection = function (newTransection, result) {
         });           
 };
 
-Transection.getTransections = function (transectionData, result) {
+Transection.getCountTransections = function (transectionData, result) {
 
-        sql.query("SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name='"+transectionData.bill+"'", function (err, res) {
+        if(transectionData.orderNo){
+            var query = "SELECT COUNT(*) AS total FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name='"+transectionData.bill+"'";
+       }else{
+            var query = "SELECT COUNT(*) AS total FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name='"+transectionData.bill+"'";
+       }
+
+        sql.query(query, function (err, res) {
+            if(err) {
+                //console.log("error: ", err);
+                result(err.sqlMessage, null);
+            }
+            else{
+                result(null, res[0].total);
+            }
+        });           
+};
+
+Transection.getTransections = function (transectionData, result) {
+       
+       if(transectionData.orderNo){
+            //var query = "SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name='"+transectionData.bill+"' AND order_id= LIMIT 0, 1";
+            var query = `SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name="${transectionData.bill}"  AND order_id="${transectionData.orderNo}" LIMIT ${transectionData.offset}, ${transectionData.limit}`;
+       }else{
+            var query = `SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name="${transectionData.bill}" LIMIT ${transectionData.offset}, ${transectionData.limit}`;
+       } 
+//console.log("query=>", query);
+        sql.query(query, function (err, res) {
             if(err) {
                 //console.log("error: ", err);
                 result(err.sqlMessage, null);
             }
             else{
                 result(null, res);
+            }
+        });           
+};
+
+
+Transection.getTransection = function (transectionData, result) {
+       
+        var query = `SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE order_id="${transectionData.orderNo}"`;
+       
+        sql.query(query, function (err, res) {
+            if(err) {
+                //console.log("error: ", err);
+                result(err.sqlMessage, null);
+            }
+            else{
+                result(null, res[0]);
             }
         });           
 };

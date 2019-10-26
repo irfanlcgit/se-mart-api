@@ -585,43 +585,149 @@ exports.payBPJS = (req, res) => {
 };
 
 
+//GET TRANSACTION DATA
+exports.getTransaction = (req, res) => {
+
+
+    const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+                timestamp: new Date(),
+                path: "/api/get-transactions",
+                status: 400,
+                error: "Required values are missing.",
+                message: errors.array()
+        });
+    }
+    var transectionData = {
+            orderNo: req.body.orderNo
+        }
+    Transection.getTransection( transectionData, function(err, transection) {
+            
+                if (err){
+                    res.status(500).json({
+                        timestamp: new Date(),
+                        path: "/api/get-transaction",
+                        status: 500,
+                        error: "Internal Server Error",
+                        message: err
+                    });
+                }else{
+                    res.status(200).json({
+                        status:0,
+                        message:"Success",
+                        size:1,
+                        pageBefore:"#",
+                        pageAfter:"#",
+                        ppobList:transection,
+                        totalPages:1,
+                        totalElements:1
+                    });
+                }
+            });
+
+}
 //GET TRANSACTIONS DATA
 exports.getTransactions = (req, res) => {
 
     const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
 
     if (!errors.isEmpty()) {
-        return res.status(400).send({
-            code: 400,
-            type: "getTransaction",
-            message: "Required values are missing.",
-            errors: errors.array()
+        return res.status(400).json({
+                timestamp: new Date(),
+                path: "/api/get-transactions",
+                status: 400,
+                error: "Required values are missing.",
+                message: errors.array()
         });
     }
-
+    const page = req.body.page; 
+    const pageLength = req.body.pageLength; 
     var transectionData = {
-        bill: req.params.bill
-    }
+              offset: page > 1? (page*pageLength)-pageLength : page-1,
+              limit: pageLength,
+              orderNo: req.body.orderNo,
+              dateFrom: req.body.dateFrom,
+              dateTo: req.body.dateTo,
+              bill: req.body.workflowState
+        }
+//console.log("transectionData=>", transectionData);
 
+    Transection.getCountTransections( transectionData, function(err, total) {
 
+        if (err){
+            res.status(500).json({
+                timestamp: new Date(),
+                path: "/api/get-transactions",
+                status: 500,
+                error: "Internal Server Error",
+                message: err
+            });
+        }else{
+            var pageBefore = "#";
+            var pageAfter = "#";
+            var totalPages = Math.floor(total/pageLength);
+            if(total%pageLength > 0){
+                totalPages++;
+            }
+            if(page > 1 && page <= totalPages){
+                pageBefore = page-1;
+            }
+            if(totalPages > page){
+                pageAfter = page+1;
+            }
+
+            Transection.getTransections( transectionData, function(err, transections) {
+            
+                if (err){
+                    res.status(500).json({
+                        timestamp: new Date(),
+                        path: "/api/get-transactions",
+                        status: 500,
+                        error: "Internal Server Error",
+                        message: err
+                    });
+                }else{
+                    res.status(200).json({
+                        status:0,
+                        message:"Success",
+                        size:total,
+                        pageBefore:pageBefore,
+                        pageAfter:pageAfter,
+                        ppobList:transections,
+                        totalPages:totalPages,
+                        totalElements:total
+                    });
+                }
+            });
+        }
+
+    });
+/*
     Transection.getTransections( transectionData, function(err, transections) {
             
         if (err){
             res.status(500).json({
-                code: 500,
-                type: "getTransaction",
-                message: "Something went wrong, Not inserted into database.",
-                error:err
+                timestamp: new Date(),
+                path: "/api/shopping/order/list/admin",
+                status: 500,
+                error: "Internal Server Error",
+                message: err
             });
         }else{
             res.status(200).json({
-                code: 200,
-                type: "getTransaction",
-                message: "Get transactions successfully.",
-                result:transections
+                status:0,
+                message:"Success",
+                size:2,
+                pageBefore:"#",
+                pageAfter:"#",
+                ppobList:transections,
+                totalPages:1,
+                totalElements:2
             });
         }
-    });
+    });*/
 
 };
 

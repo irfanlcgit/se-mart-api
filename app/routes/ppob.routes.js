@@ -379,8 +379,8 @@ module.exports = (app) => {
 
 /**
  * @swagger
- * /get-transactions/{bill}:
- *   get:
+ * /get-transactions:
+ *   post:
  *     summary: get your transactions data by date
  *     tags:
  *      - dashboard 
@@ -389,11 +389,38 @@ module.exports = (app) => {
  *     produces:
  *      - application/json
  *     parameters:
- *       - name: bill
- *         in: path
- *         description: Credits | Data | PLN | BPJS | TELEPHONE code for return transaction type
+ *       - name: body
+ *         in: body
+ *         description: Body object that needs to be create transection
  *         required: true
- *         type: string
+ *         schema:
+ *           type: object
+ *           required:
+ *             - page
+ *             - pageLength
+ *             - orderNo
+ *             - dateFrom
+ *             - dateTo
+ *             - workflowState
+ *           properties:
+ *             page:
+ *               type: number
+ *               example: 1
+ *             pageLength:
+ *               type: number
+ *               example: 20
+ *             orderNo:
+ *               type: string
+ *               example: ""
+ *             dateFrom:
+ *               type: string
+ *               example: ""
+ *             dateTo:
+ *               type: string
+ *               example: ""
+ *             workflowState:
+ *               type: string
+ *               example: "Credits"
  *     responses:
  *       200:
  *         description: A successful response
@@ -403,7 +430,43 @@ module.exports = (app) => {
  *         description: Unauthorized
  *     api_key: []
  */
- app.get('/api/get-transactions/:bill', ppob.getTransactions);
+ app.post('/api/get-transactions', ppob.getTransactions);
+
+
+/**
+ * @swagger
+ * /get-transaction:
+ *   post:
+ *     summary: get your single transaction detail
+ *     tags:
+ *      - dashboard 
+ *     security:
+ *      - ApiKeyAuth: [] 
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         description: Body object that needs to be create transection
+ *         required: true
+ *         schema:
+ *           type: object
+ *           required:
+ *             - orderNo
+ *           properties:
+ *             orderNo:
+ *               type: string
+ *               example: "425345"
+ *     responses:
+ *       200:
+ *         description: A successful response
+ *       400:
+ *         description: Reqired data is missing
+ *       401:
+ *         description: Unauthorized
+ *     api_key: []
+ */
+ app.post('/api/get-transaction', ppob.getTransaction);
 
 // Get remaining balance
 

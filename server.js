@@ -1,4 +1,8 @@
 const express = require('express');
+var cors = require('cors');
+// create express app
+const app = express();
+app.use(cors());
 //const { check, validationResult } = require('express-validator');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -6,8 +10,7 @@ const {PORT} = process.env
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 
-// create express app
-const app = express();
+
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require('swagger-ui-express');
 //const swaggerDocument = require('./swagger.json');
