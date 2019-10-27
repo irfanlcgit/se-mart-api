@@ -32,11 +32,13 @@ Transection.createTransection = function (newTransection, result) {
 };
 
 Transection.getCountTransections = function (transectionData, result) {
-
-        if(transectionData.orderNo){
-            var query = "SELECT COUNT(*) AS total FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name='"+transectionData.bill+"'";
+        if(transectionData.dateFrom&&transectionData.dateTo){
+            var query = `SELECT COUNT(*) AS total FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name="${transectionData.bill}" AND transactions.created_at>="${transectionData.dateFrom} 00:00:01" AND transactions.created_at<="${transectionData.dateTo} 23:59:59"`;
+        }
+        else if(transectionData.orderNo){
+            var query = `SELECT COUNT(*) AS total FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name="${transectionData.bill}" AND order_id="${transectionData.orderNo}"`;
        }else{
-            var query = "SELECT COUNT(*) AS total FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name='"+transectionData.bill+"'";
+            var query = `SELECT COUNT(*) AS total FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name="${transectionData.bill}" `;
        }
 
         sql.query(query, function (err, res) {
@@ -52,7 +54,10 @@ Transection.getCountTransections = function (transectionData, result) {
 
 Transection.getTransections = function (transectionData, result) {
        
-       if(transectionData.orderNo){
+       if(transectionData.dateFrom&&transectionData.dateTo){
+            var query = `SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name="${transectionData.bill}" AND transactions.created_at>="${transectionData.dateFrom} 00:00:01" AND transactions.created_at<="${transectionData.dateTo} 23:59:59" LIMIT ${transectionData.offset}, ${transectionData.limit}`;
+        }
+        else if(transectionData.orderNo){
             //var query = "SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name='"+transectionData.bill+"' AND order_id= LIMIT 0, 1";
             var query = `SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name="${transectionData.bill}"  AND order_id="${transectionData.orderNo}" LIMIT ${transectionData.offset}, ${transectionData.limit}`;
        }else{
