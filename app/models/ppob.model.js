@@ -78,7 +78,7 @@ Transection.getTransections = function (transectionData, result) {
 
 Transection.getTransection = function (transectionData, result) {
        
-        var query = `SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE order_id="${transectionData.orderNo}"`;
+        var query = `SELECT transactions.*, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON bills.id = products.bill_id WHERE order_id="${transectionData.orderNo}"`;
        
         sql.query(query, function (err, res) {
             if(err) {
