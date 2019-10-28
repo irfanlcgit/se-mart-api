@@ -55,13 +55,13 @@ Transection.getCountTransections = function (transectionData, result) {
 Transection.getTransections = function (transectionData, result) {
        
        if(transectionData.dateFrom&&transectionData.dateTo){
-            var query = `SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name="${transectionData.bill}" AND transactions.created_at>="${transectionData.dateFrom} 00:00:01" AND transactions.created_at<="${transectionData.dateTo} 23:59:59" LIMIT ${transectionData.offset}, ${transectionData.limit}`;
+            var query = `SELECT transactions.*, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON bills.id = products.bill_id WHERE bills.name="${transectionData.bill}" AND transactions.created_at>="${transectionData.dateFrom} 00:00:01" AND transactions.created_at<="${transectionData.dateTo} 23:59:59" LIMIT ${transectionData.offset}, ${transectionData.limit}`;
         }
         else if(transectionData.orderNo){
             //var query = "SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name='"+transectionData.bill+"' AND order_id= LIMIT 0, 1";
-            var query = `SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name="${transectionData.bill}"  AND order_id="${transectionData.orderNo}" LIMIT ${transectionData.offset}, ${transectionData.limit}`;
+            var query = `SELECT transactions.*, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON bills.id = products.bill_id WHERE bills.name="${transectionData.bill}"  AND order_id="${transectionData.orderNo}" LIMIT ${transectionData.offset}, ${transectionData.limit}`;
        }else{
-            var query = `SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name="${transectionData.bill}" LIMIT ${transectionData.offset}, ${transectionData.limit}`;
+            var query = `SELECT transactions.*, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON bills.id = products.bill_id WHERE bills.name="${transectionData.bill}" LIMIT ${transectionData.offset}, ${transectionData.limit}`;
        } 
 //console.log("query=>", query);
         sql.query(query, function (err, res) {
