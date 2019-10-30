@@ -139,36 +139,13 @@ exports.mobileCredit = (req, res) => {
     .then(response => {
         var result = response.data;
 
-        var new_transection = new Transection({
-        	Type: "mobileCredit",
-        	response: result
-        });
 
-        Transection.createTransection(new_transection, function(err, transection) {
-		    
-		    if (err){
-		      	res.status(500).json({
-			        code: 500,
-			        type: "mobileCredit",
-			        message: "Something went wrong, Not inserted into database.",
-			        error:err
-			    });
-		    }else{
-		    	res.status(200).json({
-			        code: 200,
-			        type: "mobileCredit",
-			        message: "Mobile credit success",
-			        result:result
-			    });
-		    }
-		});
-
-        /*res.status(200).json({
+        res.status(200).json({
             code: 200,
             type: "mobileCredit",
             message: "Mobile credit success",
             result:result
-        });*/
+        });
     })
     .catch(error => {
         res.status(500).json({
