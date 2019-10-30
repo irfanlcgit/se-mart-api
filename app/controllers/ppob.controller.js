@@ -84,13 +84,6 @@ exports.pricelistCredit = async (req, res) => {
         "produk": req.params.produk
     };
 
- 	res.status(200).json({
-            code: 200,
-            type: "pricelistCredit",
-            message: "Mobile credit pricelist success",
-            result:result_data
-        });
-
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
@@ -146,6 +139,51 @@ exports.mobileCredit = (req, res) => {
             message: "Mobile credit success",
             result:result
         });
+
+        if(result.status === "00"){
+
+            var new_transection = new Transection({
+                    order_id: random(),
+                    bill_id: 1,
+                    product_code: req.body.kode_produk,
+                    area_code: null,
+                    phone: req.body.phone_number,
+                    customer_id: null,
+                    period: null,
+                    payment_method: req.body.payment_method,
+                    value: null, 
+                    price: req.body.nominal,
+                    charge: result.saldoterpotong,
+                    profit: req.body.nominal - result.saldoterpotong,
+                    trx_status: result.keterangan
+                });
+                Transection.createTransection(new_transection, function(err, transection) {
+            
+                if (err){
+                    res.status(500).json({
+                        code: 500,
+                        type: "mobileCredit",
+                        message: "Something went wrong, Not inserted into database.",
+                        error:err
+                    });
+                }else{
+                    res.status(200).json({
+                        code: 200,
+                        type: "mobileCredit",
+                        message: "Phone bill paid successfully.",
+                        result:result
+                    });
+                }
+            });
+        }else{
+            res.status(500).json({
+                code: 500,
+                type: "mobileCredit",
+                message: "Something went wrong, Not inserted into database.",
+                error:result
+            });
+
+        }
     })
     .catch(error => {
         res.status(500).json({
