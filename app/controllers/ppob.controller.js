@@ -544,6 +544,14 @@ exports.payBPJS = (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
+
+        res.status(200).json({
+            code: 200,
+            type: "payBPJS",
+            message: "BPJS paid successfully.",
+            result:result
+        });
+
         if(result.status === "00"){
 
             var new_transection = new Transection({
@@ -574,7 +582,7 @@ exports.payBPJS = (req, res) => {
                     res.status(200).json({
                         code: 200,
                         type: "payBPJS",
-                        message: "Phone bill paid successfully.",
+                        message: "BPJS paid successfully.",
                         result:result
                     });
                 }
