@@ -97,7 +97,7 @@ exports.pricelistCredit = async (req, res) => {
                 code: 200,
                 type: "pricelistCredit",
                 message: "Mobile credit pricelist success",
-                result:pricelist
+                result:result
             });
         if(result.status === "00"){
             var pricelist = filterPricelist(result.keterangan);
