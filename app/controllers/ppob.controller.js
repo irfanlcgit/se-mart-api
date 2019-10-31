@@ -93,20 +93,23 @@ exports.pricelistCredit = async (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-        res.status(200).json({
-                code: 200,
-                type: "pricelistCredit",
-                message: "Mobile credit pricelist success",
-                result:result
-            });
         if(result.status === "00"){
             var pricelist = filterPricelist(result.keterangan);
-            res.status(200).json({
-                code: 200,
-                type: "pricelistCredit",
-                message: "Mobile credit pricelist success",
-                result:pricelist
-            });
+            if(pricelist){
+                res.status(200).json({
+                    code: 200,
+                    type: "pricelistCredit",
+                    message: "Mobile credit pricelist success",
+                    result:pricelist
+                });
+            }else{
+                res.status(500).json({
+                    code: 500,
+                    type: "pricelistCredit",
+                    message: "Something went wrong.",
+                    error:result.keterangan
+                });
+            }
         }else{
             res.status(500).json({
                 code: 500,
@@ -993,9 +996,15 @@ exports.rePrint = (req, res) => {
 // filter pricelist
 filterPricelist = (keterangan) => {
 	var result_array = [];
-	var result = keterangan.split(";");
+    if( keterangan.indexOf(';') === -1 ){
+        return false;
+    }
+	result = keterangan.split(";");
 	for (var i = 0; i < result.length-1; i++) {
 		var str_data = result[i].split(" ");
+        if(str_data[0] === "Operator" && i === 0){
+           return false; 
+        }
 		var price = result[i].substr(result[i].lastIndexOf(".") + 1).replace(/,/g, '');
 		result_array.push({
 			kode_produk: str_data[0],
