@@ -15,7 +15,7 @@ var Transection = function(transection){
     this.profit =  transection.profit;
     this.trx_status =  transection.trx_status;
     this.created_at = new Date();
-    this.updated_at = null;
+    this.updated_at = new Date();
 };
 
 Transection.createTransection = function (newTransection, result) {    

@@ -9,55 +9,61 @@ const random = uniqueRandom(1, 100000000);
 exports.validate = (method) => {
 	if(method === 'mobileCredit'){
 		return [ 
-        	body('kode_produk', 'kode_produk doesn\'t exists').not().isEmpty(),
-            body('phone_number', 'phone_number doesn\'t exists').not().isEmpty(),
-        	body('payment_method', 'payment_method doesn\'t exists').not().isEmpty()
+        	body('kode_produk', 'Payment method doesn\'t exists').not().isEmpty(),
+            body('phone_number', 'Phone number doesn\'t exists').not().isEmpty(),
+        	body('payment_method', 'Payment method doesn\'t exists').not().isEmpty(),
+            body('nominal', 'Nominal should be a number').not().isEmpty().isInt(),
+            body('biayaadmin', 'biayaadmin should be a number').not().isEmpty().isInt()
        ] 
 	}
 	if(method === 'inquiryPhone'){
 		return [ 
-        	body('area_code', 'area_code doesn\'t exists').not().isEmpty(),
-        	body('phone_number', 'phone_number doesn\'t exists').not().isEmpty()
+        	body('area_code', 'Area code doesn\'t exists').not().isEmpty(),
+        	body('phone_number', 'Phone number doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'payPhoneBill'){
 		return [ 
-        	body('area_code', 'area_code doesn\'t exists').not().isEmpty(),
-        	body('phone_number', 'phone_number doesn\'t exists').not().isEmpty(),
-        	body('nominal', 'nominal doesn\'t exists').not().isEmpty(),
+        	body('area_code', 'Area code doesn\'t exists').not().isEmpty(),
+        	body('phone_number', 'Phone number doesn\'t exists').not().isEmpty(),
+        	body('nominal', 'Nominal  should be a number').not().isEmpty().isInt(),
+            body('biayaadmin', 'biayaadmin should be a number').not().isEmpty().isInt(),
         	body('ref2', 'ref2 doesn\'t exists').not().isEmpty(),
-            body('payment_method', 'payment_method doesn\'t exists').not().isEmpty()
+            body('payment_method', 'Payment method doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'inquiryElectricity'){
 		return [ 
-        	body('customer_id', 'customer_id doesn\'t exists').not().isEmpty()
+        	body('customer_id', 'Customer id doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'payElectricityBill'){
 		return [ 
-        	body('customer_id', 'customer_id doesn\'t exists').not().isEmpty(),
-        	body('nominal', 'nominal doesn\'t exists').not().isEmpty(),
+        	body('customer_id', 'Customer id doesn\'t exists').not().isEmpty(),
+            body('nominal', 'Nominal  should be a number').not().isEmpty().isInt(),
+            body('biayaadmin', 'biayaadmin should be a number').not().isEmpty().isInt(),
         	body('ref2', 'ref2 doesn\'t exists').not().isEmpty(),
-            body('payment_method', 'payment_method doesn\'t exists').not().isEmpty()
+            body('payment_method', 'Payment method doesn\'t exists').not().isEmpty(),
+            body('product_code', 'Product code doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'bpjsInquiry'){
 		return [ 
-        	body('kode_produk', 'kode_produk doesn\'t exists').not().isEmpty(),
-        	body('customer_id', 'customer_id doesn\'t exists').not().isEmpty(),
-        	body('periode', 'periode doesn\'t exists').not().isEmpty()
+        	body('kode_produk', 'Payment method doesn\'t exists').not().isEmpty(),
+        	body('customer_id', 'Customer id doesn\'t exists').not().isEmpty(),
+        	body('periode', 'Periode doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'payBPJS'){
 		return [ 
-        	body('kode_produk', 'kode_produk doesn\'t exists').not().isEmpty(),
-        	body('customer_id', 'customer_id doesn\'t exists').not().isEmpty(),
-        	body('periode', 'periode doesn\'t exists').not().isEmpty(),
-        	body('phone_number', 'phone_number doesn\'t exists').not().isEmpty(),
-        	body('nominal', 'nominal doesn\'t exists').not().isEmpty(),
+        	body('kode_produk', 'Payment method doesn\'t exists').not().isEmpty(),
+        	body('customer_id', 'Customer id doesn\'t exists').not().isEmpty(),
+        	body('periode', 'Periode doesn\'t exists').not().isEmpty(),
+        	body('phone_number', 'Phone number doesn\'t exists').not().isEmpty(),
+            body('nominal', 'Nominal  should be a number').not().isEmpty().isInt(),
+            body('biayaadmin', 'biayaadmin should be a number').not().isEmpty().isInt(),
         	body('ref2', 'ref2 doesn\'t exists').not().isEmpty(),
-            body('payment_method', 'payment_method doesn\'t exists').not().isEmpty()
+            body('payment_method', 'Payment method doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'transactionData'){
@@ -68,7 +74,7 @@ exports.validate = (method) => {
 	}
 	if(method === 'statusCheck'){
 		return [ 
-        	body('kode_produk', 'kode_produk doesn\'t exists').not().isEmpty()
+        	body('kode_produk', 'Product code doesn\'t exists').not().isEmpty()
        ] 
 	}
 }
@@ -87,20 +93,29 @@ exports.pricelistCredit = async (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-
-        res.status(200).json({
-            code: 200,
-            type: "pricelistCredit",
-            message: "Mobile credit pricelist success",
-            result:result
-        });
+        if(result.status === "00"){
+            var pricelist = filterPricelist(result.keterangan);
+            res.status(200).json({
+                code: 200,
+                type: "pricelistCredit",
+                message: "Mobile credit pricelist success",
+                result:pricelist
+            });
+        }else{
+            res.status(500).json({
+                code: 500,
+                type: "pricelistCredit",
+                message: "Something went wrong.",
+                error:result.keterangan
+            });
+        }
     })
     .catch(error => {
         res.status(500).json({
             code: 500,
             type: "pricelistCredit",
-            message: "Something went wrong.",
-            error:error
+            message: "Fastpay API failed to response.",
+            error:error.message
         });
     });
 }
@@ -131,66 +146,56 @@ exports.mobileCredit = (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-
-
-        res.status(200).json({
-            code: 200,
-            type: "mobileCredit",
-            message: "Mobile credit success",
-            result:result
-        });
-
         if(result.status === "00"){
 
             var new_transection = new Transection({
-                    order_id: random(),
-                    bill_id: 1,
-                    product_code: req.body.kode_produk,
-                    area_code: null,
-                    phone: req.body.phone_number,
-                    customer_id: null,
-                    period: null,
-                    payment_method: req.body.payment_method,
-                    value: null, 
-                    price: req.body.nominal,
-                    charge: result.saldoterpotong,
-                    profit: req.body.nominal - result.saldoterpotong,
-                    trx_status: result.keterangan
-                });
-                Transection.createTransection(new_transection, function(err, transection) {
-            
-                if (err){
-                    res.status(500).json({
-                        code: 500,
-                        type: "mobileCredit",
-                        message: "Something went wrong, Not inserted into database.",
-                        error:err
-                    });
-                }else{
-                    res.status(200).json({
-                        code: 200,
-                        type: "mobileCredit",
-                        message: "Phone bill paid successfully.",
-                        result:result
-                    });
-                }
+                order_id: random(),
+                bill_id: 1,
+                product_code: req.body.kode_produk,
+                area_code: null,
+                phone: req.body.phone_number,
+                customer_id: null,
+                period: null,
+                payment_method: req.body.payment_method,
+                value: req.body.nominal, 
+                price: req.body.nominal + req.body.biayaadmin,
+                charge: result.saldoterpotong,
+                profit: req.body.nominal + req.body.biayaadmin - result.saldoterpotong,
+                trx_status: result.keterangan
             });
+            Transection.createTransection(new_transection, function(err, transection) {
+    		    
+    		    if (err){
+    		      	res.status(500).json({
+    			        code: 500,
+    			        type: "mobileCredit",
+    			        message: "Something went wrong, Not inserted into database.",
+    			        error:err
+    			    });
+    		    }else{
+    		    	res.status(200).json({
+    			        code: 200,
+    			        type: "mobileCredit",
+    			        message: "Mobile credit success",
+    			        result:result.keterangan
+    			    });
+    		    }
+    		});
         }else{
             res.status(500).json({
                 code: 500,
-                type: "mobileCredit",
-                message: "Something went wrong, Not inserted into database.",
-                error:result
+                type: "payPhoneBill",
+                message: "Something went wrong.",
+                error:result.keterangan
             });
-
         }
     })
     .catch(error => {
         res.status(500).json({
             code: 500,
             type: "mobileCredit",
-            message: "Something went wrong.",
-            error:error
+            message: "Fastpay API failed to response.",
+            error:error.message
         });
     });
 };
@@ -225,20 +230,28 @@ exports.inquiryPhone = (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-
-        res.status(200).json({
-            code: 200,
-            type: "inquiryPhone",
-            message: "Inquiry success",
-            result:result
-        });
+        if(result.status === "00"){
+            res.status(200).json({
+                code: 200,
+                type: "inquiryPhone",
+                message: "Inquiry success",
+                result:result
+            });
+        }else{
+            res.status(500).json({
+                code: 500,
+                type: "inquiryPhone",
+                message: "Something went wrong.",
+                error:result.keterangan
+            });
+        }
     })
     .catch(error => {
         res.status(500).json({
             code: 500,
             type: "inquiryPhone",
-            message: "Something went wrong.",
-            error:error
+            message: "Fastpay API failed to response.",
+            error:error.message
         });
     });
 }
@@ -286,10 +299,10 @@ exports.payPhoneBill = (req, res) => {
                     customer_id: req.body.customer_id,
                     period: null,
                     payment_method: req.body.payment_method,
-                    value: null, 
-                    price: req.body.nominal,
+                    value: req.body.nominal, 
+                    price: req.body.nominal + req.body.biayaadmin,
                     charge: result.saldoterpotong,
-                    profit: req.body.nominal - result.saldoterpotong,
+                    profit: req.body.nominal + req.body.biayaadmin - result.saldoterpotong,
                     trx_status: result.keterangan
                 });
                 Transection.createTransection(new_transection, function(err, transection) {
@@ -299,15 +312,14 @@ exports.payPhoneBill = (req, res) => {
                         code: 500,
                         type: "payPhoneBill",
                         message: "Something went wrong, Not inserted into database.",
-                        error:err,
-                        input: new_transection
+                        error:err
                     });
                 }else{
                     res.status(200).json({
                         code: 200,
                         type: "payPhoneBill",
                         message: "Phone bill paid successfully.",
-                        result:result
+                        result:result.keterangan
                     });
                 }
             });
@@ -315,10 +327,9 @@ exports.payPhoneBill = (req, res) => {
             res.status(500).json({
                 code: 500,
                 type: "payPhoneBill",
-                message: "Something went wrong, Not inserted into database.",
-                error:result
+                message: "Something went wrong.",
+                error:result.keterangan
             });
-
         }
         
     })
@@ -326,8 +337,8 @@ exports.payPhoneBill = (req, res) => {
         res.status(500).json({
             code: 500,
             type: "payPhoneBill",
-            message: "Something went wrong.",
-            error:error
+            message: "Fastpay API failed to response.",
+            error:error.message
         });
     });
 };
@@ -352,7 +363,7 @@ exports.inquiryElectricity = (req, res) => {
         "uid": API_UID,
         "pin": API_PIN,
         "ref1": "REF1_VALUE",
-        "kode_produk": "PLNNONH",
+        "kode_produk": req.body.kode_produk,
         "idpel1": req.body.customer_id,
         "idpel2": "",
     	"idpel3": ""
@@ -361,20 +372,28 @@ exports.inquiryElectricity = (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-
-        res.status(200).json({
-            code: 200,
-            type: "inquiryElectricity",
-            message: "Inquiry success",
-            result:result
-        });
+        if(result.status === "00"){
+            res.status(200).json({
+                code: 200,
+                type: "inquiryElectricity",
+                message: "Inquiry success",
+                result:result
+            });
+        }else{
+            res.status(500).json({
+                code: 500,
+                type: "inquiryElectricity",
+                message: "Something went wrong.",
+                error:result.keterangan
+            });
+        }
     })
     .catch(error => {
         res.status(500).json({
             code: 500,
             type: "inquiryElectricity",
-            message: "Something went wrong.",
-            error:error
+            message: "Fastpay API failed to response.",
+            error:error.message
         });
     });
 }
@@ -401,7 +420,7 @@ exports.payElectricityBill = (req, res) => {
         "ref2": req.body.ref2,
         "ref3": "",
         "nominal": req.body.nominal,
-        "kode_produk": "PLNNONH",
+        "kode_produk": req.body.product_code,
         "idpel1": req.body.customer_id,
         "idpel2": "",
         "idpel3": ""
@@ -416,16 +435,16 @@ exports.payElectricityBill = (req, res) => {
             var new_transection = new Transection({
                     order_id: random(),
                     bill_id: 3,
-                    product_code: "PLNNONH",
+                    product_code: req.body.product_code,
                     area_code: null,
                     phone: null,
                     customer_id: req.body.customer_id,
                     period: null,
                     payment_method: req.body.payment_method,
-                    value: null, 
-                    price: req.body.nominal,
+                    value: req.body.nominal, 
+                    price: req.body.nominal + req.body.biayaadmin,
                     charge: result.saldoterpotong,
-                    profit: req.body.nominal - result.saldoterpotong,
+                    profit: req.body.nominal + req.body.biayaadmin - result.saldoterpotong,
                     trx_status: result.keterangan
                 });
                 Transection.createTransection(new_transection, function(err, transection) {
@@ -442,7 +461,7 @@ exports.payElectricityBill = (req, res) => {
                         code: 200,
                         type: "payElectricityBill",
                         message: "Phone bill paid successfully.",
-                        result:result
+                        result:result.keterangan
                     });
                 }
             });
@@ -450,8 +469,8 @@ exports.payElectricityBill = (req, res) => {
             res.status(500).json({
                 code: 500,
                 type: "payElectricityBill",
-                message: "Something went wrong, Not inserted into database.",
-                error:result
+                message: "Something went wrong.",
+                error:result.keterangan
             });
 
         }
@@ -461,8 +480,8 @@ exports.payElectricityBill = (req, res) => {
         res.status(500).json({
             code: 500,
             type: "payElectricityBill",
-            message: "Something went wrong.",
-            error:error
+            message: "Fastpay API failed to response.",
+            error:error.message
         });
     });
 };
@@ -494,20 +513,28 @@ exports.bpjsInquiry = (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-
-        res.status(200).json({
-            code: 200,
-            type: "bpjsInquiry",
-            message: "BPJS Inquiry success",
-            result:result
-        });
+        if(result.status === "00"){
+            res.status(200).json({
+                code: 200,
+                type: "bpjsInquiry",
+                message: "BPJS Inquiry success",
+                result:result
+            });
+        }else{
+            res.status(500).json({
+                code: 500,
+                type: "bpjsInquiry",
+                message: "Something went wrong.",
+                error:result.keterangan
+            });
+        }
     })
     .catch(error => {
         res.status(500).json({
             code: 500,
             type: "bpjsInquiry",
-            message: "Something went wrong.",
-            error:error
+            message: "Fastpay API failed to response.",
+            error:error.message
         });
     });
 }
@@ -544,14 +571,6 @@ exports.payBPJS = (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-
-        res.status(200).json({
-            code: 200,
-            type: "payBPJS",
-            message: "BPJS paid successfully.",
-            result:result
-        });
-
         if(result.status === "00"){
 
             var new_transection = new Transection({
@@ -563,10 +582,10 @@ exports.payBPJS = (req, res) => {
                     customer_id: req.body.customer_id,
                     period: req.body.periode,
                     payment_method: req.body.payment_method,
-                    value: null, 
-                    price: req.body.nominal,
+                    value: req.body.nominal, 
+                    price: req.body.nominal + req.body.biayaadmin,
                     charge: result.saldoterpotong,
-                    profit: req.body.nominal - result.saldoterpotong,
+                    profit: req.body.nominal + req.body.biayaadmin - result.saldoterpotong,
                     trx_status: result.keterangan
                 });
                 Transection.createTransection(new_transection, function(err, transection) {
@@ -582,8 +601,8 @@ exports.payBPJS = (req, res) => {
                     res.status(200).json({
                         code: 200,
                         type: "payBPJS",
-                        message: "BPJS paid successfully.",
-                        result:result
+                        message: "Phone bill paid successfully.",
+                        result:result.keterangan
                     });
                 }
             });
@@ -591,8 +610,8 @@ exports.payBPJS = (req, res) => {
             res.status(500).json({
                 code: 500,
                 type: "payBPJS",
-                message: "Something went wrong, Not inserted into database.",
-                error:result
+                message: "Something went wrong.",
+                error:result.keterangan
             });
 
         }
@@ -601,8 +620,8 @@ exports.payBPJS = (req, res) => {
         res.status(500).json({
             code: 500,
             type: "payBPJS",
-            message: "Something went wrong.",
-            error:error
+            message: "Fastpay API failed to response.",
+            error:error.message
         });
     });
 };
@@ -727,30 +746,6 @@ exports.getTransactions = (req, res) => {
         }
 
     });
-/*
-    Transection.getTransections( transectionData, function(err, transections) {
-            
-        if (err){
-            res.status(500).json({
-                timestamp: new Date(),
-                path: "/api/shopping/order/list/admin",
-                status: 500,
-                error: "Internal Server Error",
-                message: err
-            });
-        }else{
-            res.status(200).json({
-                status:0,
-                message:"Success",
-                size:2,
-                pageBefore:"#",
-                pageAfter:"#",
-                ppobList:transections,
-                totalPages:1,
-                totalElements:2
-            });
-        }
-    });*/
 
 };
 
@@ -783,20 +778,28 @@ exports.transactionData = (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-
-        res.status(200).json({
-            code: 200,
-            type: "transactionData",
-            message: "Transaction status get success",
-            result:result
-        });
+        if(result.status === "00"){
+            res.status(200).json({
+                code: 200,
+                type: "transactionData",
+                message: "Transaction status get success",
+                result:result
+            });
+        }else{
+            res.status(500).json({
+                code: 500,
+                type: "transactionData",
+                message: "Something went wrong.",
+                error:result.keterangan
+            });
+        }
     })
     .catch(error => {
         res.status(500).json({
             code: 500,
             type: "transactionData",
-            message: "Something went wrong.",
-            error:error
+            message: "Fastpay API failed to response.",
+            error:error.message
         });
     });
 
@@ -833,20 +836,28 @@ exports.statusCheck = (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-
-        res.status(200).json({
-            code: 200,
-            type: "statusCheck",
-            message: "Transaction status get success",
-            result:result
-        });
+        if(result.status === "00"){
+            res.status(200).json({
+                code: 200,
+                type: "statusCheck",
+                message: "Transaction status get success",
+                result:result
+            });
+        }else{
+            res.status(500).json({
+                code: 500,
+                type: "statusCheck",
+                message: "Something went wrong.",
+                error:result.keterangan
+            });
+        }
     })
     .catch(error => {
         res.status(500).json({
             code: 500,
             type: "statusCheck",
-            message: "Something went wrong.",
-            error:error
+            message: "Fastpay API failed to response.",
+            error:error.message
         });
     });
 
@@ -864,29 +875,119 @@ exports.balanceCheck = (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
-
-        res.status(200).json({
-            code: 200,
-            type: "balanceCheck",
-            message: "Balance get success",
-            result:result
-        });
+        if(result.status === "00"){
+            res.status(200).json({
+                code: 200,
+                type: "balanceCheck",
+                message: "Balance get success",
+                result:result
+            });
+        }else{
+            res.status(500).json({
+                code: 500,
+                type: "balanceCheck",
+                message: "Something went wrong.",
+                error:result.keterangan
+            });
+        }
     })
     .catch(error => {
         res.status(500).json({
             code: 500,
             type: "balanceCheck",
-            message: "Something went wrong.",
-            error:error
+            message: "Fastpay API failed to response.",
+            error:error.message
         });
     });
 }
 
 
+// Re-print transaction receipt
+exports.rePrint = (req, res) => {
+
+	const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+
+    if (!errors.isEmpty()) {
+        return res.status(400).send({
+            code: 400,
+            type: "rePrint",
+            message: "Required values are missing.",
+            errors: errors.array()
+        });
+    }
+	
+	var postBody = {
+        "method": "fastpay.cu",
+        "uid": API_UID,
+        "pin": API_PIN,
+        "ref1": req.body.ref1,
+        "ref2": req.body.ref2
+    }
+
+
+    axios.post(API_URL, postBody)
+    .then(response => {
+        var result = response.data;
+        if(result.status === "00"){
+
+            // var new_transection = new Transection({
+            //         order_id: random(),
+            //         bill_id: 4,
+            //         product_code: req.body.kode_produk,
+            //         area_code: null,
+            //         phone: req.body.phone_number,
+            //         customer_id: req.body.customer_id,
+            //         period: req.body.periode,
+            //         payment_method: req.body.payment_method,
+            //         value: req.body.nominal, 
+            //         price: req.body.nominal + req.body.biayaadmin,
+            //         charge: result.saldoterpotong,
+            //         profit: req.body.nominal + req.body.biayaadmin - result.saldoterpotong,
+            //         trx_status: result.keterangan
+            //     });
+                // Transection.createTransection(new_transection, function(err, transection) {
+            
+                // if (err){
+                //     res.status(500).json({
+                //         code: 500,
+                //         type: "payBPJS",
+                //         message: "Something went wrong, Not inserted into database.",
+                //         error:err
+                //     });
+                // }else{
+                    res.status(200).json({
+                        code: 200,
+                        type: "rePrint",
+                        message: "rePrint receipt of billing",
+                        result:result
+                    });
+                // }
+            // }
+            // );
+        }else{
+            res.status(500).json({
+                code: 500,
+                type: "rePrint",
+                message: "Something went wrong.",
+                error:result.keterangan
+            });
+
+        }
+    })
+    .catch(error => {
+        res.status(500).json({
+            code: 500,
+            type: "rePrint",
+            message: "Fastpay API failed to response.",
+            error:error.message
+        });
+    });
+};
+
 // filter pricelist
-/*filterPricelist = (array) => {
+filterPricelist = (keterangan) => {
 	var result_array = [];
-	var result = array.split(";");
+	var result = keterangan.split(";");
 	for (var i = 0; i < result.length-1; i++) {
 		var str_data = result[i].split(" ");
 		var price = result[i].substr(result[i].lastIndexOf(".") + 1).replace(/,/g, '');
@@ -899,4 +1000,4 @@ exports.balanceCheck = (req, res) => {
 	}
 	
 	return result_array;
-}*/
+};
