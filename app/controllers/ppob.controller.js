@@ -93,6 +93,12 @@ exports.pricelistCredit = async (req, res) => {
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
+        res.status(200).json({
+                code: 200,
+                type: "pricelistCredit",
+                message: "Mobile credit pricelist success",
+                result:pricelist
+            });
         if(result.status === "00"){
             var pricelist = filterPricelist(result.keterangan);
             res.status(200).json({
