@@ -1006,13 +1006,14 @@ filterPricelist = (keterangan) => {
            return false; 
         }
         var kode_produk= str_data[0];
-        var saldoterpotong = "Rp."+result[i].substr(result[i].lastIndexOf(".") + 1).replace(/,\s*$/, "");
+        //var saldoterpotong = "Rp."+result[i].substr(result[i].lastIndexOf(".") + 1).replace(/,\s*$/, "");
+        var saldoterpotong = result[i].substr(result[i].lastIndexOf(".") + 1).replace(/,/g, '');
 		//var price = result[i].substr(result[i].lastIndexOf(".") + 1).replace(/,/g, '');
         var description= result[i].replace(saldoterpotong, '').replace(kode_produk, '');
 		result_array.push({
 			kode_produk: kode_produk,
             saldoterpotong: saldoterpotong,
-            description: description.replace(/,\s*$/, "").trim()
+            description: description.replace(/ *\([^)]*\) */g, "").replace(/,\s*$/, "").trim()
 		});
 
 	}
