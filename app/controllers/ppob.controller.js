@@ -513,7 +513,7 @@ exports.bpjsInquiry = (req, res) => {
         "method": "fastpay.bpjsinq",
         "uid": API_UID,
         "pin": API_PIN,
-        "ref1": "REF1_VALUE",
+        "ref1": req.body.ref1,
         "kode_produk": req.body.kode_produk,
     	"idpel1": req.body.customer_id,
     	"periode": req.body.periode
