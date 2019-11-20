@@ -1008,11 +1008,11 @@ filterPricelist = (keterangan) => {
         var kode_produk= str_data[0];
         var saldoterpotong = "Rp."+result[i].substr(result[i].lastIndexOf(".") + 1).replace(/,\s*$/, "");
 		//var price = result[i].substr(result[i].lastIndexOf(".") + 1).replace(/,/g, '');
-        var description= result[i].replace(saldoterpotong, '');
+        var description= result[i].replace(saldoterpotong, '').replace(kode_produk, '');
 		result_array.push({
 			kode_produk: kode_produk,
             saldoterpotong: saldoterpotong,
-            description: description
+            description: description.replace(/,\s*$/, "")
 		});
 
 	}
