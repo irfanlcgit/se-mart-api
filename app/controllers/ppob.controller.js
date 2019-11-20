@@ -1012,7 +1012,7 @@ filterPricelist = (keterangan) => {
 		result_array.push({
 			kode_produk: kode_produk,
             saldoterpotong: saldoterpotong,
-            description: description.replace(/,\s*$/, "")
+            description: description.replace(/,\s*$/, "").trim()
 		});
 
 	}
