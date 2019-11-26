@@ -18,12 +18,14 @@ exports.validate = (method) => {
 	}
 	if(method === 'inquiryPhone'){
 		return [ 
+            body('kode_produk', 'kode produk doesn\'t exists').not().isEmpty(),
         	body('area_code', 'Area code doesn\'t exists').not().isEmpty(),
         	body('phone_number', 'Phone number doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'payPhoneBill'){
 		return [ 
+            body('product_code', 'Product code doesn\'t exists').not().isEmpty(),
         	body('area_code', 'Area code doesn\'t exists').not().isEmpty(),
         	body('phone_number', 'Phone number doesn\'t exists').not().isEmpty(),
         	body('nominal', 'Nominal  should be a number').not().isEmpty().isInt(),
@@ -94,6 +96,12 @@ exports.pricelistCredit = async (req, res) => {
     .then(response => {
         var result = response.data;
         if(result.status === "00"){
+            res.status(200).json({
+                    code: 200,
+                    type: "pricelistCredit",
+                    message: "Mobile credit pricelist success",
+                    result:result
+            });
             var pricelist = filterPricelist(result.keterangan);
             if(pricelist){
                 res.status(200).json({
@@ -227,8 +235,8 @@ exports.inquiryPhone = (req, res) => {
         "method": "fastpay.inq",
         "uid": API_UID,
         "pin": API_PIN,
-        "ref1": "REF1_VALUE",
-        "kode_produk": "TELEPON",
+        "ref1": req.body.ref1,
+        "kode_produk": req.body.kode_produk,
         "idpel1": req.body.area_code,
         "idpel2": req.body.phone_number,
     	"idpel3": ""
@@ -287,7 +295,7 @@ exports.payPhoneBill = (req, res) => {
         "ref2": req.body.ref2,
         "ref3": "",
         "nominal": req.body.nominal,
-        "kode_produk": "TELEPON",
+        "kode_produk": req.body.product_code,
         "idpel1": req.body.area_code,
         "idpel2": req.body.phone_number,
         "idpel3": ""
@@ -371,7 +379,7 @@ exports.inquiryElectricity = (req, res) => {
         "method": "fastpay.inq",
         "uid": API_UID,
         "pin": API_PIN,
-        "ref1": "REF1_VALUE",
+        "ref1": req.body.ref1,
         "kode_produk": req.body.kode_produk,
         "idpel1": req.body.customer_id,
         "idpel2": "",

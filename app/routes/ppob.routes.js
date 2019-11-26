@@ -109,15 +109,22 @@ module.exports = (app) => {
  *         schema:
  *           type: object
  *           required:
+ *             - kode_produk
  *             - area_code
  *             - phone_number
  *           properties:
+ *             kode_produk:
+ *               type: string
+ *               example: "TELEPON"
  *             area_code:
  *               type: string
  *               example: "021"
  *             phone_number:
  *               type: string
  *               example: "88393209"
+ *             ref1:
+ *               type: string
+ *               example: ""
  *     responses:
  *       200:
  *         description: A successful response
@@ -149,6 +156,7 @@ module.exports = (app) => {
  *         schema:
  *           type: object
  *           required:
+ *             - product_code
  *             - area_code
  *             - phone_number
  *             - ref2
@@ -156,6 +164,9 @@ module.exports = (app) => {
  *             - biayaadmin
  *             - payment_method
  *           properties:
+ *             product_code:
+ *               type: string
+ *               example: "TELEPON"
  *             area_code:
  *               type: string
  *               example: "021"
@@ -216,7 +227,10 @@ module.exports = (app) => {
  *              example: "PLNPRA"
  *             customer_id:
  *               type: string
- *               example: "01117082246"  
+ *               example: "01117082246" 
+ *             ref1:
+ *               type: string
+ *               example: ""  
  *     responses:
  *       200:
  *         description: A successful response
