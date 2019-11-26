@@ -158,12 +158,7 @@ exports.mobileCredit = (req, res) => {
     .then(response => {
         var result = response.data;
         if(result.status === "00"){
-            res.status(200).json({
-                        code: 200,
-                        type: "mobileCredit",
-                        message: "Mobile credit success",
-                        result:result
-                    });
+            
             var new_transection = new Transection({
                 order_id: random(),
                 bill_id: 1,
