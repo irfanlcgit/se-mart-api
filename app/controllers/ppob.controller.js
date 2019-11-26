@@ -1025,7 +1025,7 @@ filterPricelist = (keterangan) => {
 			kode_produk: kode_produk,
             price: price,
             saldoterpotong: saldoterpotong,
-            description: description,
+            description: result[i],
             value: value,
             type: type
 		});
@@ -1036,7 +1036,7 @@ filterPricelist = (keterangan) => {
 };
 
 getPricelistType = (desc) => {
-    var substrings = ["DATA", "GB"];
+    var substrings = ["DATA", "Data", "GB", "MB"];
     for (var i = 0; i != substrings.length; i++) {
        var substring = substrings[i];
        if (desc.indexOf(substring) != - 1) {
