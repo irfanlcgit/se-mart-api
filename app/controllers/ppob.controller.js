@@ -158,7 +158,12 @@ exports.mobileCredit = (req, res) => {
     .then(response => {
         var result = response.data;
         if(result.status === "00"){
-
+            res.status(200).json({
+                        code: 200,
+                        type: "mobileCredit",
+                        message: "Mobile credit success",
+                        result:result
+                    });
             var new_transection = new Transection({
                 order_id: random(),
                 bill_id: 1,
@@ -1011,16 +1016,69 @@ filterPricelist = (keterangan) => {
         var saldoterpotong_remove = "Rp."+result[i].substr(result[i].lastIndexOf(".") + 1).replace(/,\s*$/, "");
         var saldoterpotong = result[i].substr(result[i].lastIndexOf(".") + 1).replace(/,/g, '');
 		//var price = result[i].substr(result[i].lastIndexOf(".") + 1).replace(/,/g, '');
-        var price =  ((parseInt(saldoterpotong) / 5000) + 1) * 5000;
-        var description= result[i].replace(saldoterpotong_remove, '').replace(kode_produk, '');
-		result_array.push({
+        var price =  (Math.ceil((parseInt(saldoterpotong) / 5000))) * 5000;
+        var description = result[i].replace(saldoterpotong_remove, '').replace(kode_produk, '');
+		description = description.replace(/ *\([^)]*\) */g, "").replace(/,\s*$/, "").trim();
+        var type = getPricelistType(description);
+        var value = getPricelistValue(description, type);
+        result_array.push({
 			kode_produk: kode_produk,
             price: price,
             saldoterpotong: saldoterpotong,
-            description: description.replace(/ *\([^)]*\) */g, "").replace(/,\s*$/, "").trim()
+            description: description,
+            value: value,
+            type: type
 		});
 
 	}
 	
 	return result_array;
 };
+
+getPricelistType = (desc) => {
+    var substrings = ["DATA", "GB"];
+    for (var i = 0; i != substrings.length; i++) {
+       var substring = substrings[i];
+       if (desc.indexOf(substring) != - 1) {
+         return "internet";
+       }
+    }
+    return "credit";
+}
+
+getPricelistValue = (desc, type) => {
+    var value = 0;
+    
+    if(type === "internet"){
+        var key = (desc.indexOf("GB") != - 1)? "GB" : "MB";
+        var find = ' '+key;
+        var re = new RegExp(find, 'gi');
+        var new_desc = desc.replace(re, key);
+        new_desc = new_desc.split("+").join(" + ");
+        var substrings = new_desc.split(" ");
+        for (var i = 0; i != substrings.length; i++) {
+            var substring = substrings[i];
+            if (substring.indexOf(key) != - 1) {
+                value = value + parseFloat(substring);
+            }
+        }
+        value = value + key;
+    }else{
+        var new_desc = desc.replace(/ Mnt/gi, "mnt");
+        new_desc = new_desc.split("+").join(" + ");
+        var key = (new_desc.indexOf("mnt") != - 1)? "mnt" : "RB";
+        var substrings = new_desc.split(" ");
+        for (var i = 0; i != substrings.length; i++) {
+            var substring = substrings[i];
+            if (substring.indexOf(key) != - 1) {
+                value = value + parseFloat(substring);
+            }
+        }
+        if(key === "RB"){
+           value = value * 1000; 
+        }else{
+            value = value + key; 
+        }
+    }
+    return value.toString();
+}
