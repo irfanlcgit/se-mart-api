@@ -1025,7 +1025,7 @@ filterPricelist = (keterangan) => {
 			kode_produk: kode_produk,
             price: price,
             saldoterpotong: saldoterpotong,
-            description: result[i],
+            description: description,
             value: value,
             type: type
 		});
