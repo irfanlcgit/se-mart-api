@@ -1020,12 +1020,12 @@ filterPricelist = (keterangan) => {
         var description = result[i].replace(saldoterpotong_remove, '').replace(kode_produk, '');
 		description = description.replace(/ *\([^)]*\) */g, "").replace(/,\s*$/, "").trim();
         var type = getPricelistType(description);
-        var value = getPricelistValue(result[i], type);
+        var value = getPricelistValue(description, type);
         result_array.push({
 			kode_produk: kode_produk,
             price: price,
             saldoterpotong: saldoterpotong,
-            description: result[i],
+            description: description,
             value: value,
             type: type
 		});
