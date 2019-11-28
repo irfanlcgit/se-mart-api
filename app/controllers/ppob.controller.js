@@ -481,7 +481,7 @@ exports.payElectricityBill = (req, res) => {
                     res.status(200).json({
                         code: 200,
                         type: "payElectricityBill",
-                        message: "Phone bill paid successfully.",
+                        message: "Electricity bill paid successfully.",
                         result:result.keterangan
                     });
                 }
@@ -623,7 +623,7 @@ exports.payBPJS = (req, res) => {
                     res.status(200).json({
                         code: 200,
                         type: "payBPJS",
-                        message: "Phone bill paid successfully.",
+                        message: "BPJS paid successfully.",
                         result:result.keterangan
                     });
                 }
