@@ -54,30 +54,42 @@ module.exports = (app) => {
  *         schema:
  *           type: object
  *           required:
- *            - kode_produk
+ *            - ref_customer_id
+ *            - product_code
  *            - phone_number
+ *            - price
+ *            - saldoterpotong
+ *            - value
+ *            - type
  *            - payment_method
- *            - nominal
- *            - biayaadmin
  *           properties:
- *            kode_produk:
+ *            ref_customer_id:
+ *              type: string
+ *              example: ""
+ *            product_code:
  *              type: string
  *              example: I10H
  *            phone_number:
  *              type: string
  *              example: 085648889293
+ *            price:
+ *              type: number
+ *              example: 5000
+ *            saldoterpotong:
+ *              type: number
+ *              example: 4700
+ *            value:
+ *              type: string
+ *              example: "4GB"
+ *            type:
+ *              type: string
+ *              example: "internet"
+ *            ref1:
+ *              type: string
+ *              example: "" 
  *            payment_method:
  *              type: string
  *              example: wallet
- *            nominal:
- *              type: number
- *              example: 5000
- *            biayaadmin:
- *              type: number
- *              example: 50
- *            ref1:
- *              type: string
- *              example: ref1 value 
  *     responses:
  *       200:
  *         description: A successful response
@@ -156,6 +168,7 @@ module.exports = (app) => {
  *         schema:
  *           type: object
  *           required:
+ *             - ref_customer_id
  *             - product_code
  *             - area_code
  *             - phone_number
@@ -164,6 +177,9 @@ module.exports = (app) => {
  *             - biayaadmin
  *             - payment_method
  *           properties:
+ *             ref_customer_id:
+ *               type: string
+ *               example: ""
  *             product_code:
  *               type: string
  *               example: "TELEPON"
@@ -262,13 +278,20 @@ module.exports = (app) => {
  *         schema:
  *           type: object
  *           required:
+ *             - ref_customer_id
+ *             - product_code
  *             - customer_id
  *             - ref2
  *             - nominal
  *             - biayaadmin
- *             - product_code
  *             - payment_method
  *           properties:
+ *             ref_customer_id:
+ *               type: string
+ *               example: ""
+ *             product_code:
+ *               type: string
+ *               example: "PLNPRAB"
  *             customer_id:
  *               type: string
  *               example: "5392112011703"
@@ -278,18 +301,15 @@ module.exports = (app) => {
  *             biayaadmin:
  *               type: number
  *               example: 500
- *             product_code:
+ *             ref1:
  *               type: string
- *               example: "PLNPRAB"
+ *               example: ""
+ *             ref2:
+ *               type: string
+ *               example: ""
  *             payment_method:
  *               type: string
  *               example: cash
- *             ref1:
- *               type: string
- *               example: ref1 value
- *             ref2:
- *               type: string
- *               example: ref2 value
  *     responses:
  *       200:
  *         description: A successful response
@@ -337,7 +357,7 @@ module.exports = (app) => {
  *               example: "12"
  *             ref1:
  *               type: string
- *               example: ref1 value
+ *               example: ""
  *     responses:
  *       200:
  *         description: A successful response
@@ -371,39 +391,43 @@ module.exports = (app) => {
  *         schema:
  *           type: object
  *           required:
- *             - kode_produk
+ *             - ref_customer_id
+ *             - product_code
  *             - customer_id
+ *             - phone_number
+ *             - periode
  *             - nominal
  *             - biayaadmin
- *             - periode
  *             - ref2
- *             - phone_number
  *             - payment_method
  *           properties:
- *             kode_produk:
+ *             ref_customer_id:
+ *               type: string
+ *               example: ""
+ *             product_code:
  *               type: string
  *               example: "ASRBPJSKS"
  *             customer_id:
  *               type: string
  *               example: "8888801851523593"
- *             nominal:
- *               type: number
- *               example: 
- *             biayaadmin:
- *               type: number
- *               example: 500
- *             periode:
- *               type: string
- *               example: "12"
- *             ref1:
- *               type: string
- *               example: ref1 value
- *             ref2:
- *               type: string
- *               example: "432635265"
  *             phone_number:
  *               type: string
  *               example: "085648889293" 
+ *             periode:
+ *               type: string
+ *               example: "12"
+ *             nominal:
+ *               type: number
+ *               example: 50000
+ *             biayaadmin:
+ *               type: number
+ *               example: 500
+ *             ref1:
+ *               type: string
+ *               example: ""
+ *             ref2:
+ *               type: string
+ *               example: "432635265"
  *             payment_method:
  *               type: string
  *               example: cashwallet 
@@ -491,6 +515,9 @@ app.get('/api/balance-check', ppob.balanceCheck);
  *             workflowState:
  *               type: string
  *               example: "Credits"
+ *             ref_customer_id:
+ *               type: string
+ *               example: ""
  *     responses:
  *       200:
  *         description: A successful response

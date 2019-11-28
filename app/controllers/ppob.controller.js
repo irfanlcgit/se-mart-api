@@ -9,11 +9,14 @@ const random = uniqueRandom(1, 100000000);
 exports.validate = (method) => {
 	if(method === 'mobileCredit'){
 		return [ 
-        	body('kode_produk', 'Payment method doesn\'t exists').not().isEmpty(),
+            body('ref_customer_id', 'Ref customer id doesn\'t exists').not().isEmpty(),
+        	body('product_code', 'Product code doesn\'t exists').not().isEmpty(),
             body('phone_number', 'Phone number doesn\'t exists').not().isEmpty(),
-        	body('payment_method', 'Payment method doesn\'t exists').not().isEmpty(),
-            body('nominal', 'Nominal should be a number').not().isEmpty().isInt(),
-            body('biayaadmin', 'biayaadmin should be a number').not().isEmpty().isInt()
+            body('price', 'Price should be a number').not().isEmpty().isNumeric(),
+            body('saldoterpotong', 'Saldoterpotong should be a number').not().isEmpty().isNumeric(),
+            body('value', 'Value doesn\'t exists').not().isEmpty(),
+            body('type', 'Type doesn\'t exists').not().isEmpty(),
+        	body('payment_method', 'Payment method doesn\'t exists').not().isEmpty()
        ] 
 	}
 	if(method === 'inquiryPhone'){
@@ -25,6 +28,7 @@ exports.validate = (method) => {
 	}
 	if(method === 'payPhoneBill'){
 		return [ 
+            body('ref_customer_id', 'Ref customer id doesn\'t exists').not().isEmpty(),
             body('product_code', 'Product code doesn\'t exists').not().isEmpty(),
         	body('area_code', 'Area code doesn\'t exists').not().isEmpty(),
         	body('phone_number', 'Phone number doesn\'t exists').not().isEmpty(),
@@ -36,33 +40,36 @@ exports.validate = (method) => {
 	}
 	if(method === 'inquiryElectricity'){
 		return [ 
+            body('kode_produk', 'kode produk doesn\'t exists').not().isEmpty(),
         	body('customer_id', 'Customer id doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'payElectricityBill'){
 		return [ 
-        	body('customer_id', 'Customer id doesn\'t exists').not().isEmpty(),
+            body('ref_customer_id', 'Ref customer id doesn\'t exists').not().isEmpty(),
+            body('product_code', 'Product code doesn\'t exists').not().isEmpty(),
+            body('customer_id', 'Customer id doesn\'t exists').not().isEmpty(),
             body('nominal', 'Nominal  should be a number').not().isEmpty().isInt(),
             body('biayaadmin', 'biayaadmin should be a number').not().isEmpty().isInt(),
-        	body('ref2', 'ref2 doesn\'t exists').not().isEmpty(),
-            body('payment_method', 'Payment method doesn\'t exists').not().isEmpty(),
-            body('product_code', 'Product code doesn\'t exists').not().isEmpty()
+            body('ref2', 'ref2 doesn\'t exists').not().isEmpty(),
+            body('payment_method', 'Payment method doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'bpjsInquiry'){
 		return [ 
-        	body('kode_produk', 'Payment method doesn\'t exists').not().isEmpty(),
+        	body('kode_produk', 'Kode produk doesn\'t exists').not().isEmpty(),
         	body('customer_id', 'Customer id doesn\'t exists').not().isEmpty(),
         	body('periode', 'Periode doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'payBPJS'){
 		return [ 
-        	body('kode_produk', 'Payment method doesn\'t exists').not().isEmpty(),
+            body('ref_customer_id', 'Ref customer id doesn\'t exists').not().isEmpty(),
+        	body('product_code', 'Product code doesn\'t exists').not().isEmpty(),
         	body('customer_id', 'Customer id doesn\'t exists').not().isEmpty(),
-        	body('periode', 'Periode doesn\'t exists').not().isEmpty(),
         	body('phone_number', 'Phone number doesn\'t exists').not().isEmpty(),
-            body('nominal', 'Nominal  should be a number').not().isEmpty().isInt(),
+            body('periode', 'Periode doesn\'t exists').not().isEmpty(),
+            body('nominal', 'Nominal should be a number').not().isEmpty().isInt(),
             body('biayaadmin', 'biayaadmin should be a number').not().isEmpty().isInt(),
         	body('ref2', 'ref2 doesn\'t exists').not().isEmpty(),
             body('payment_method', 'Payment method doesn\'t exists').not().isEmpty()
@@ -76,7 +83,7 @@ exports.validate = (method) => {
 	}
 	if(method === 'statusCheck'){
 		return [ 
-        	body('kode_produk', 'Product code doesn\'t exists').not().isEmpty()
+        	body('kode_produk', 'Kode produk doesn\'t exists').not().isEmpty()
        ] 
 	}
 }
@@ -149,7 +156,7 @@ exports.mobileCredit = (req, res) => {
         "method": "fastpay.pulsa",
         "uid": API_UID,
         "pin": API_PIN,
-        "kode_produk": req.body.kode_produk,
+        "kode_produk": req.body.product_code,
         "no_hp": req.body.phone_number,
         "ref1": req.body.ref1,
     };
@@ -158,20 +165,21 @@ exports.mobileCredit = (req, res) => {
     .then(response => {
         var result = response.data;
         if(result.status === "00"){
-            
+
             var new_transection = new Transection({
                 order_id: random(),
-                bill_id: 1,
-                product_code: req.body.kode_produk,
+                bill_id: (req.body.type === "internet")? 2 : 1,
+                ref_customer_id: req.body.ref_customer_id,
+                product_code: req.body.product_code,
                 area_code: null,
                 phone: req.body.phone_number,
                 customer_id: null,
                 period: null,
                 payment_method: req.body.payment_method,
-                value: req.body.nominal, 
-                price: req.body.nominal + req.body.biayaadmin,
-                charge: result.saldoterpotong,
-                profit: req.body.nominal + req.body.biayaadmin - result.saldoterpotong,
+                value: req.body.value, 
+                price: req.body.price,
+                charge: req.body.saldoterpotong,
+                profit: req.body.price - req.body.saldoterpotong,
                 trx_status: result.keterangan
             });
             Transection.createTransection(new_transection, function(err, transection) {
@@ -304,7 +312,8 @@ exports.payPhoneBill = (req, res) => {
             var new_transection = new Transection({
                     order_id: random(),
                     bill_id: 5,
-                    product_code: "TELEPON",
+                    ref_customer_id: req.body.ref_customer_id,
+                    product_code: req.body.product_code,
                     area_code: req.body.area_code,
                     phone: req.body.phone_number,
                     customer_id: req.body.customer_id,
@@ -446,6 +455,7 @@ exports.payElectricityBill = (req, res) => {
             var new_transection = new Transection({
                     order_id: random(),
                     bill_id: 3,
+                    ref_customer_id: req.body.ref_customer_id,
                     product_code: req.body.product_code,
                     area_code: null,
                     phone: null,
@@ -572,7 +582,7 @@ exports.payBPJS = (req, res) => {
         "ref1": req.body.ref1,
         "ref2": req.body.ref2,
         "nominal": req.body.nominal,
-        "kode_produk": req.body.kode_produk,
+        "kode_produk": req.body.product_code,
         "idpel1": req.body.customer_id,
         "periode": req.body.periode,
         "no_hp": req.body.phone_number
@@ -587,7 +597,8 @@ exports.payBPJS = (req, res) => {
             var new_transection = new Transection({
                     order_id: random(),
                     bill_id: 4,
-                    product_code: req.body.kode_produk,
+                    ref_customer_id: req.body.ref_customer_id,
+                    product_code: req.body.product_code,
                     area_code: null,
                     phone: req.body.phone_number,
                     customer_id: req.body.customer_id,
@@ -695,43 +706,9 @@ exports.getTransactions = (req, res) => {
                 message: errors.array()
         });
     }
-    const page = req.body.page; 
-    const pageLength = req.body.pageLength; 
-    var transectionData = {
-              offset: page > 1? (page*pageLength)-pageLength : page-1,
-              limit: pageLength,
-              orderNo: req.body.orderNo,
-              dateFrom: req.body.dateFrom,
-              dateTo: req.body.dateTo,
-              bill: req.body.workflowState
-        }
-//console.log("transectionData=>", transectionData);
 
-    Transection.getCountTransections( transectionData, function(err, total) {
-
-        if (err){
-            res.status(500).json({
-                timestamp: new Date(),
-                path: "/api/get-transactions",
-                status: 500,
-                error: "Internal Server Error",
-                message: err
-            });
-        }else{
-            var pageBefore = "#";
-            var pageAfter = "#";
-            var totalPages = Math.floor(total/pageLength);
-            if(total%pageLength > 0){
-                totalPages++;
-            }
-            if(page > 1 && page <= totalPages){
-                pageBefore = page-1;
-            }
-            if(totalPages > page){
-                pageAfter = page+1;
-            }
-
-            Transection.getTransections( transectionData, function(err, transections) {
+    if(req.body.ref_customer_id){
+        Transection.getTransectionsByCustomerId( req.body.ref_customer_id, function(err, transections) {
             
                 if (err){
                     res.status(500).json({
@@ -745,19 +722,79 @@ exports.getTransactions = (req, res) => {
                     res.status(200).json({
                         status:0,
                         message:"Success",
-                        size:total,
-                        pageBefore:pageBefore,
-                        pageAfter:pageAfter,
+                        size:1,
+                        pageBefore:"#",
+                        pageAfter:"#",
                         ppobList:transections,
-                        totalPages:totalPages,
-                        totalElements:total
+                        totalPages:1,
+                        totalElements:1
                     });
                 }
             });
-        }
+    }else{
+        const page = req.body.page; 
+        const pageLength = req.body.pageLength; 
+        var transectionData = {
+                  offset: page > 1? (page*pageLength)-pageLength : page-1,
+                  limit: pageLength,
+                  orderNo: req.body.orderNo,
+                  dateFrom: req.body.dateFrom,
+                  dateTo: req.body.dateTo,
+                  bill: req.body.workflowState
+            }
+    //console.log("transectionData=>", transectionData);
 
-    });
+        Transection.getCountTransections( transectionData, function(err, total) {
 
+            if (err){
+                res.status(500).json({
+                    timestamp: new Date(),
+                    path: "/api/get-transactions",
+                    status: 500,
+                    error: "Internal Server Error",
+                    message: err
+                });
+            }else{
+                var pageBefore = "#";
+                var pageAfter = "#";
+                var totalPages = Math.floor(total/pageLength);
+                if(total%pageLength > 0){
+                    totalPages++;
+                }
+                if(page > 1 && page <= totalPages){
+                    pageBefore = page-1;
+                }
+                if(totalPages > page){
+                    pageAfter = page+1;
+                }
+
+                Transection.getTransections( transectionData, function(err, transections) {
+                
+                    if (err){
+                        res.status(500).json({
+                            timestamp: new Date(),
+                            path: "/api/get-transactions",
+                            status: 500,
+                            error: "Internal Server Error",
+                            message: err
+                        });
+                    }else{
+                        res.status(200).json({
+                            status:0,
+                            message:"Success",
+                            size:total,
+                            pageBefore:pageBefore,
+                            pageAfter:pageAfter,
+                            ppobList:transections,
+                            totalPages:totalPages,
+                            totalElements:total
+                        });
+                    }
+                });
+            }
+
+        });
+    }
 };
 
 //TRANSACTION DATA

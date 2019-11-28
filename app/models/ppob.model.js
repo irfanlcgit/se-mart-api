@@ -3,6 +3,7 @@ var sql = require('./db.js');
 var Transection = function(transection){
     this.order_id =  transection.order_id;
     this.bill_id =  transection.bill_id;
+    this.ref_customer_id =  transection.ref_customer_id;
     this.product_code =  transection.product_code;
     this.area_code =  transection.area_code;
     this.phone =  transection.phone;
@@ -50,6 +51,19 @@ Transection.getCountTransections = function (transectionData, result) {
                 result(null, res[0].total);
             }
         });           
+};
+
+Transection.getTransectionsByCustomerId = function (refCustomerId, result) {
+    var query = `SELECT transactions.*, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE transactions.ref_customer_id="${refCustomerId}" GROUP BY transactions.id`;
+       
+    sql.query(query, function (err, res) {
+        if(err) {
+            result(err.sqlMessage, null);
+        }
+        else{
+            result(null, res);
+        }
+    });          
 };
 
 Transection.getTransections = function (transectionData, result) {
