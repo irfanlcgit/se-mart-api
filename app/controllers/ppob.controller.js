@@ -165,11 +165,11 @@ exports.mobileCredit = (req, res) => {
     .then(response => {
         var result = response.data;
         if(result.status === "00"){
-
+            let ref_customer_id = req.body.ref_customer_id;
             var new_transection = new Transection({
                 order_id: random(),
                 bill_id: (req.body.type === "internet")? 2 : 1,
-                ref_customer_id: req.body.ref_customer_id.replace(/\\"/g, '"'),
+                ref_customer_id: ref_customer_id,
                 product_code: req.body.product_code,
                 area_code: null,
                 phone: req.body.phone_number,
