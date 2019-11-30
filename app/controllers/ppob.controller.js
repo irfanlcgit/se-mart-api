@@ -169,7 +169,7 @@ exports.mobileCredit = (req, res) => {
             var new_transection = new Transection({
                 order_id: random(),
                 bill_id: (req.body.type === "internet")? 2 : 1,
-                ref_customer_id: encodeURI(req.body.ref_customer_id),
+                ref_customer_id: req.body.ref_customer_id,
                 product_code: req.body.product_code,
                 area_code: null,
                 phone: req.body.phone_number,
@@ -708,7 +708,7 @@ exports.getTransactions = (req, res) => {
     }
 
     if(req.body.ref_customer_id){
-        Transection.getTransectionsByCustomerId( encodeURI(req.body.ref_customer_id), function(err, transections) {
+        Transection.getTransectionsByCustomerId( req.body.ref_customer_id, function(err, transections) {
             
                 if (err){
                     res.status(500).json({
