@@ -186,7 +186,22 @@ exports.mobileCredit = (req, res) => {
                         code: 200,
                         type: "mobileCredit",
                         message: "Mobile credit success",
-                        result:new_transection
+                        result:{
+                order_id: random(),
+                bill_id: (req.body.type === "internet")? 2 : 1,
+                ref_customer_id: req.body.ref_customer_id,
+                product_code: req.body.product_code,
+                area_code: null,
+                phone: req.body.phone_number,
+                customer_id: null,
+                period: null,
+                payment_method: req.body.payment_method,
+                value: req.body.value, 
+                price: req.body.price,
+                charge: req.body.saldoterpotong,
+                profit: req.body.price - req.body.saldoterpotong,
+                trx_status: result.keterangan
+            }
                     });
             Transection.createTransection(new_transection, function(err, transection) {
     		    
