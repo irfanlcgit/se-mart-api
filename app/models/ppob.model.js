@@ -3,7 +3,7 @@ var sql = require('./db.js');
 var Transection = function(transection){
     this.order_id =  transection.order_id;
     this.bill_id =  transection.bill_id;
-    this.ref_customer_id =  transection.ref_customer_id;
+    this.ref_customer_id =  transection.ref_customer_id.replace(/_FS_/g, '\\');
     this.product_code =  transection.product_code;
     this.area_code =  transection.area_code;
     this.phone =  transection.phone;
@@ -54,6 +54,7 @@ Transection.getCountTransections = function (transectionData, result) {
 };
 
 Transection.getTransectionsByCustomerId = function (refCustomerId, result) {
+    let refCustomerId = refCustomerId.replace(/_FS_/g, '\\');
     var query = `SELECT transactions.*, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE transactions.ref_customer_id="${refCustomerId}" GROUP BY transactions.id`;
        
     sql.query(query, function (err, res) {
