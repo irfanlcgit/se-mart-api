@@ -54,7 +54,7 @@ Transection.getCountTransections = function (transectionData, result) {
 };
 
 Transection.getTransectionsByCustomerId = function (refCustomerId, result) {
-    let refCustomerId = refCustomerId.replace(/_FS_/g, '\\');
+    refCustomerId = refCustomerId.replace(/_FS_/g, '\\');
     var query = `SELECT transactions.*, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE transactions.ref_customer_id="${refCustomerId}" GROUP BY transactions.id`;
        
     sql.query(query, function (err, res) {
