@@ -1056,7 +1056,7 @@ filterPricelist = (keterangan) => {
         result_array.push({
 			kode_produk: kode_produk,
             price: price,
-            saldoterpotong: saldoterpotong,
+            saldoterpotong: parseInt(saldoterpotong),
             description: description,
             value: value,
             type: type
