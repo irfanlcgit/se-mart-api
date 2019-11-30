@@ -168,7 +168,7 @@ exports.mobileCredit = (req, res) => {
             var new_transection = new Transection({
                 order_id: random(),
                 bill_id: (req.body.type === "internet")? 2 : 1,
-                ref_customer_id: req.body.ref_customer_id.replace(/_FS_/g, '\\'),
+                ref_customer_id: req.body.ref_customer_id,
                 product_code: req.body.product_code,
                 area_code: null,
                 phone: req.body.phone_number,
@@ -693,9 +693,7 @@ exports.getTransaction = (req, res) => {
 }
 //GET TRANSACTIONS DATA
 exports.getTransactions = (req, res) => {
-    var new_transection = new Transection({
-                    ref_customer_id: req.body.ref_customer_id
-                });
+    
     const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
 
     if (!errors.isEmpty()) {
@@ -709,10 +707,10 @@ exports.getTransactions = (req, res) => {
     }
 
     if(req.body.ref_customer_id){
-        var transectionData = {
-            refCustomerId: req.body.ref_customer_id.replace(/_FS_/g, '\\')
-        }
-        Transection.getTransectionsByCustomerId( transectionData, function(err, transections) {
+        var new_transection = new Transection({
+                    ref_customer_id: req.body.ref_customer_id
+            });
+        Transection.getTransectionsByCustomerId( new_transection, function(err, transections) {
             
                 if (err){
                     res.status(500).json({
