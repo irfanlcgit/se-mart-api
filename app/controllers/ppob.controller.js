@@ -321,8 +321,8 @@ exports.payPhoneBill = (req, res) => {
                     payment_method: req.body.payment_method,
                     value: req.body.nominal, 
                     price: req.body.nominal + req.body.biayaadmin,
-                    charge: result.saldoterpotong,
-                    profit: req.body.nominal + req.body.biayaadmin - result.saldoterpotong,
+                    charge: parseInt(result.saldoterpotong),
+                    profit: req.body.nominal + req.body.biayaadmin - parseInt(result.saldoterpotong),
                     trx_status: result.keterangan
                 });
                 Transection.createTransection(new_transection, function(err, transection) {
@@ -464,8 +464,8 @@ exports.payElectricityBill = (req, res) => {
                     payment_method: req.body.payment_method,
                     value: req.body.nominal, 
                     price: req.body.nominal + req.body.biayaadmin,
-                    charge: result.saldoterpotong,
-                    profit: req.body.nominal + req.body.biayaadmin - result.saldoterpotong,
+                    charge: parseInt(result.saldoterpotong),
+                    profit: req.body.nominal + req.body.biayaadmin - parseInt(result.saldoterpotong),
                     trx_status: result.keterangan
                 });
                 Transection.createTransection(new_transection, function(err, transection) {
@@ -606,8 +606,8 @@ exports.payBPJS = (req, res) => {
                     payment_method: req.body.payment_method,
                     value: req.body.nominal, 
                     price: req.body.nominal + req.body.biayaadmin,
-                    charge: result.saldoterpotong,
-                    profit: req.body.nominal + req.body.biayaadmin - result.saldoterpotong,
+                    charge: parseInt(result.saldoterpotong),
+                    profit: req.body.nominal + req.body.biayaadmin - parseInt(result.saldoterpotong),
                     trx_status: result.keterangan
                 });
                 Transection.createTransection(new_transection, function(err, transection) {
