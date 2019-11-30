@@ -707,7 +707,10 @@ exports.getTransactions = (req, res) => {
     }
 
     if(req.body.ref_customer_id){
-        Transection.getTransectionsByCustomerId( req.body.ref_customer_id, function(err, transections) {
+        var transectionData = {
+            refCustomerId: req.body.ref_customer_id.replace(/_FS_/g, '\\')
+        }
+        Transection.getTransectionsByCustomerId( transectionData, function(err, transections) {
             
                 if (err){
                     res.status(500).json({
