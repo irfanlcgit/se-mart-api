@@ -3,7 +3,7 @@ var sql = require('./db.js');
 var Transection = function(transection){
     this.order_id =  transection.order_id;
     this.bill_id =  transection.bill_id;
-    this.ref_customer_id =  "MvA/\pVO3SzkUJIG8UZaqDA==";
+    this.ref_customer_id =  "MvA\pVO3SzkUJIG8UZaqDA==";
     this.product_code =  transection.product_code;
     this.area_code =  transection.area_code;
     this.phone =  transection.phone;
