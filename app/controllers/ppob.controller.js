@@ -168,7 +168,7 @@ exports.mobileCredit = (req, res) => {
 
             var new_transection = new Transection({
                 order_id: random(),
-                bill_id: (req.body.type === "internet")? 2 : 1,
+                bill_id: 2,
                 ref_customer_id: req.body.ref_customer_id,
                 product_code: req.body.product_code,
                 area_code: null,
