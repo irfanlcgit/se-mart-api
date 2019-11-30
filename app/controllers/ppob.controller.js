@@ -693,7 +693,9 @@ exports.getTransaction = (req, res) => {
 }
 //GET TRANSACTIONS DATA
 exports.getTransactions = (req, res) => {
-
+    var new_transection = new Transection({
+                    ref_customer_id: req.body.ref_customer_id
+                });
     const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
 
     if (!errors.isEmpty()) {
