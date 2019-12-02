@@ -55,7 +55,7 @@ Transection.getCountTransections = function (transectionData, result) {
 
 Transection.getTransectionsByCustomerId = function (transectionData, result) {
     let refCustomerId = transectionData.ref_customer_id;
-    var query = "SELECT transactions.*, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE transactions.ref_customer_id=" + sql.escape(refCustomerId) + "GROUP BY transactions.id";
+    var query = "SELECT transactions.*, bills.name as bill_name, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE transactions.ref_customer_id=" + sql.escape(refCustomerId) + "GROUP BY transactions.id";
     console.log("refCustomerId=>", query);
        
     sql.query(query, function (err, res) {
@@ -71,13 +71,13 @@ Transection.getTransectionsByCustomerId = function (transectionData, result) {
 Transection.getTransections = function (transectionData, result) {
        
        if(transectionData.dateFrom&&transectionData.dateTo){
-            var query = `SELECT transactions.*, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE bills.name="${transectionData.bill}" AND transactions.created_at>="${transectionData.dateFrom} 00:00:01" AND transactions.created_at<="${transectionData.dateTo} 23:59:59" GROUP BY transactions.id LIMIT ${transectionData.offset}, ${transectionData.limit}`;
+            var query = `SELECT transactions.*, bills.name as bill_name, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE bills.name="${transectionData.bill}" AND transactions.created_at>="${transectionData.dateFrom} 00:00:01" AND transactions.created_at<="${transectionData.dateTo} 23:59:59" GROUP BY transactions.id LIMIT ${transectionData.offset}, ${transectionData.limit}`;
         }
         else if(transectionData.orderNo){
             //var query = "SELECT transactions.* FROM transactions JOIN bills ON transactions.bill_id = bills.id WHERE bills.name='"+transectionData.bill+"' AND order_id= LIMIT 0, 1";
-            var query = `SELECT transactions.*, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE bills.name="${transectionData.bill}"  AND order_id="${transectionData.orderNo}" GROUP BY transactions.id LIMIT ${transectionData.offset}, ${transectionData.limit}`;
+            var query = `SELECT transactions.*, bills.name as bill_name, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE bills.name="${transectionData.bill}"  AND order_id="${transectionData.orderNo}" GROUP BY transactions.id LIMIT ${transectionData.offset}, ${transectionData.limit}`;
        }else{
-            var query = `SELECT transactions.*, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE bills.name="${transectionData.bill}" GROUP BY transactions.id LIMIT ${transectionData.offset}, ${transectionData.limit}`;
+            var query = `SELECT transactions.*, bills.name as bill_name, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE bills.name="${transectionData.bill}" GROUP BY transactions.id LIMIT ${transectionData.offset}, ${transectionData.limit}`;
        } 
 //console.log("query=>", query);
         sql.query(query, function (err, res) {
@@ -94,7 +94,7 @@ Transection.getTransections = function (transectionData, result) {
 
 Transection.getTransection = function (transectionData, result) {
        
-        var query = `SELECT transactions.*, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE transactions.order_id="${transectionData.orderNo}" GROUP BY transactions.id`;
+        var query = `SELECT transactions.*, bills.name as bill_name, products.name as product_name, products.provider as product_provider FROM transactions JOIN bills ON transactions.bill_id = bills.id LEFT JOIN products ON transactions.product_code = products.code WHERE transactions.order_id="${transectionData.orderNo}" GROUP BY transactions.id`;
        
         sql.query(query, function (err, res) {
             if(err) {

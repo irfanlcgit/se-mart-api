@@ -318,10 +318,10 @@ exports.payPhoneBill = (req, res) => {
                     customer_id: req.body.customer_id,
                     period: null,
                     payment_method: req.body.payment_method,
-                    value: req.body.nominal, 
-                    price: req.body.nominal + req.body.biayaadmin,
+                    value: req.body.nominal*1, 
+                    price: (req.body.nominal*1) + req.body.biayaadmin,
                     charge: parseInt(result.saldoterpotong),
-                    profit: req.body.nominal + req.body.biayaadmin - parseInt(result.saldoterpotong),
+                    profit: (req.body.nominal*1) + req.body.biayaadmin - parseInt(result.saldoterpotong),
                     trx_status: result.keterangan
                 });
                 Transection.createTransection(new_transection, function(err, transection) {
@@ -461,10 +461,10 @@ exports.payElectricityBill = (req, res) => {
                     customer_id: req.body.customer_id,
                     period: null,
                     payment_method: req.body.payment_method,
-                    value: req.body.nominal, 
-                    price: req.body.nominal + req.body.biayaadmin,
+                    value: req.body.nominal*1, 
+                    price: (req.body.nominal*1) + req.body.biayaadmin,
                     charge: parseInt(result.saldoterpotong),
-                    profit: req.body.nominal + req.body.biayaadmin - parseInt(result.saldoterpotong),
+                    profit: (req.body.nominal*1) + req.body.biayaadmin - parseInt(result.saldoterpotong),
                     trx_status: result.keterangan
                 });
                 Transection.createTransection(new_transection, function(err, transection) {
@@ -519,17 +519,16 @@ exports.bpjsInquiry = (req, res) => {
             errors: errors.array()
         });
     }
-
+    var customer_id = req.body.customer_id.replace(/^.{2}/g, '88888');
     var postBody = {
         "method": "fastpay.bpjsinq",
         "uid": API_UID,
         "pin": API_PIN,
         "ref1": req.body.ref1,
         "kode_produk": req.body.kode_produk,
-    	"idpel1": req.body.customer_id,
+    	"idpel1": customer_id,
     	"periode": req.body.periode
     };
-
     axios.post(API_URL, postBody)
     .then(response => {
         var result = response.data;
@@ -573,7 +572,7 @@ exports.payBPJS = (req, res) => {
             errors: errors.array()
         });
     }
-	
+	var customer_id = req.body.customer_id.replace(/^.{2}/g, '88888');
 	var postBody = {
         "method": "fastpay.bpjspay",
         "uid": API_UID,
@@ -582,7 +581,7 @@ exports.payBPJS = (req, res) => {
         "ref2": req.body.ref2,
         "nominal": req.body.nominal,
         "kode_produk": req.body.product_code,
-        "idpel1": req.body.customer_id,
+        "idpel1": customer_id,
         "periode": req.body.periode,
         "no_hp": req.body.phone_number
     }
@@ -603,10 +602,10 @@ exports.payBPJS = (req, res) => {
                     customer_id: req.body.customer_id,
                     period: req.body.periode,
                     payment_method: req.body.payment_method,
-                    value: req.body.nominal, 
-                    price: req.body.nominal + req.body.biayaadmin,
+                    value: req.body.nominal*1, 
+                    price: (req.body.nominal*1) + req.body.biayaadmin,
                     charge: parseInt(result.saldoterpotong),
-                    profit: req.body.nominal + req.body.biayaadmin - parseInt(result.saldoterpotong),
+                    profit: (req.body.nominal*1) + req.body.biayaadmin - parseInt(result.saldoterpotong),
                     trx_status: result.keterangan
                 });
                 Transection.createTransection(new_transection, function(err, transection) {

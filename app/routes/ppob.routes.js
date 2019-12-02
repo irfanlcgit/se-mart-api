@@ -291,7 +291,7 @@ module.exports = (app) => {
  *               example: ""
  *             product_code:
  *               type: string
- *               example: "PLNPRAB"
+ *               example: "PLNPRA"
  *             customer_id:
  *               type: string
  *               example: "5392112011703"
@@ -351,7 +351,7 @@ module.exports = (app) => {
  *               example: "ASRBPJSKS"
  *             customer_id:
  *               type: string
- *               example: "8888801851523593"
+ *               example: "0001821212256"
  *             periode:
  *               type: string
  *               example: "12"
@@ -409,10 +409,10 @@ module.exports = (app) => {
  *               example: "ASRBPJSKS"
  *             customer_id:
  *               type: string
- *               example: "8888801851523593"
+ *               example: "0001821212256"
  *             phone_number:
  *               type: string
- *               example: "085648889293" 
+ *               example: "0001821212256" 
  *             periode:
  *               type: string
  *               example: "12"
