@@ -39,15 +39,17 @@ exports.validate = (method) => {
        ]
 	}
 	if(method === 'inquiryElectricity'){
+        let Constants = ['PLNPASC','PLNPRA'];
 		return [ 
-            body('kode_produk', 'kode produk doesn\'t exists').not().isEmpty(),
+            body('kode_produk', 'kode produk doesn\'t exists').not().isEmpty().isIn(Constants).withMessage("kode produk must be one of:"+JSON.stringify(Constants)),
         	body('customer_id', 'Customer id doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'payElectricityBill'){
+        let Constants = ['PLNPASC','PLNPRA'];
 		return [ 
             body('ref_customer_id', 'Ref customer id doesn\'t exists').not().isEmpty(),
-            body('product_code', 'Product code doesn\'t exists').not().isEmpty(),
+            body('product_code', 'Product code doesn\'t exists').not().isEmpty().isIn(Constants).withMessage("Product code must be one of:"+JSON.stringify(Constants)),
             body('customer_id', 'Customer id doesn\'t exists').not().isEmpty(),
             body('nominal', 'Nominal  should be a number').not().isEmpty().isInt(),
             body('biayaadmin', 'biayaadmin should be a number').not().isEmpty().isInt(),
@@ -320,8 +322,8 @@ exports.payPhoneBill = (req, res) => {
                     payment_method: req.body.payment_method,
                     value: req.body.nominal*1, 
                     price: (req.body.nominal*1) + req.body.biayaadmin,
-                    charge: parseInt(result.saldoterpotong),
-                    profit: (req.body.nominal*1) + req.body.biayaadmin - parseInt(result.saldoterpotong),
+                    charge: result.saldoterpotong*1,
+                    profit: (req.body.nominal*1) + req.body.biayaadmin - (result.saldoterpotong*1),
                     trx_status: result.keterangan
                 });
                 Transection.createTransection(new_transection, function(err, transection) {
@@ -366,7 +368,7 @@ exports.payPhoneBill = (req, res) => {
 // Inquiry Electricity
 exports.inquiryElectricity = (req, res) => {
 
-	const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+    const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
 
     if (!errors.isEmpty()) {
         return res.status(400).send({
@@ -376,16 +378,26 @@ exports.inquiryElectricity = (req, res) => {
             errors: errors.array()
         });
     }
-    
+    var idpel1 = "";
+    var idpel2 = "";
+    if(req.body.kode_produk === "PLNPASC"){
+        var idpel1 = req.body.customer_id;
+    }else{
+        if(req.body.customer_id.length === 12){
+            idpel2 = req.body.customer_id;
+        }else{
+            idpel1 = req.body.customer_id;
+        }
+    }
     var postBody = {
         "method": "fastpay.inq",
         "uid": API_UID,
         "pin": API_PIN,
         "ref1": req.body.ref1,
         "kode_produk": req.body.kode_produk,
-        "idpel1": req.body.customer_id,
-        "idpel2": "",
-    	"idpel3": ""
+        "idpel1": idpel1,
+        "idpel2": idpel2,
+        "idpel3": ""
     };
 
     axios.post(API_URL, postBody)
@@ -430,7 +442,17 @@ exports.payElectricityBill = (req, res) => {
             errors: errors.array()
         });
     }
-	
+	var idpel1 = "";
+    var idpel2 = "";
+    if(req.body.product_code === "PLNPASC"){
+        var idpel1 = req.body.customer_id;
+    }else{
+        if(req.body.customer_id.length === 12){
+            idpel2 = req.body.customer_id;
+        }else{
+            idpel1 = req.body.customer_id;
+        }
+    }
 	var postBody = {
         "method": "fastpay.pay",
         "uid": API_UID,
@@ -440,8 +462,8 @@ exports.payElectricityBill = (req, res) => {
         "ref3": "",
         "nominal": req.body.nominal,
         "kode_produk": req.body.product_code,
-        "idpel1": req.body.customer_id,
-        "idpel2": "",
+        "idpel1": idpel1,
+        "idpel2": idpel2,
         "idpel3": ""
     }
 
@@ -463,8 +485,8 @@ exports.payElectricityBill = (req, res) => {
                     payment_method: req.body.payment_method,
                     value: req.body.nominal*1, 
                     price: (req.body.nominal*1) + req.body.biayaadmin,
-                    charge: parseInt(result.saldoterpotong),
-                    profit: (req.body.nominal*1) + req.body.biayaadmin - parseInt(result.saldoterpotong),
+                    charge: result.saldoterpotong*1,
+                    profit: (req.body.nominal*1) + req.body.biayaadmin - (result.saldoterpotong*1),
                     trx_status: result.keterangan
                 });
                 Transection.createTransection(new_transection, function(err, transection) {
@@ -604,8 +626,8 @@ exports.payBPJS = (req, res) => {
                     payment_method: req.body.payment_method,
                     value: req.body.nominal*1, 
                     price: (req.body.nominal*1) + req.body.biayaadmin,
-                    charge: parseInt(result.saldoterpotong),
-                    profit: (req.body.nominal*1) + req.body.biayaadmin - parseInt(result.saldoterpotong),
+                    charge: result.saldoterpotong*1,
+                    profit: (req.body.nominal*1) + req.body.biayaadmin - (result.saldoterpotong*1),
                     trx_status: result.keterangan
                 });
                 Transection.createTransection(new_transection, function(err, transection) {
