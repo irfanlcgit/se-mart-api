@@ -22,16 +22,16 @@ exports.validate = (method) => {
 	if(method === 'inquiryPhone'){
 		return [ 
             body('kode_produk', 'kode produk doesn\'t exists').not().isEmpty(),
-        	body('area_code', 'Area code doesn\'t exists').not().isEmpty(),
-        	body('phone_number', 'Phone number doesn\'t exists').not().isEmpty()
+        	//body('area_code', 'Area code doesn\'t exists').not().isEmpty(),
+        	//body('phone_number', 'Phone number doesn\'t exists').not().isEmpty()
        ]
 	}
 	if(method === 'payPhoneBill'){
 		return [ 
             body('ref_customer_id', 'Ref customer id doesn\'t exists').not().isEmpty(),
             body('product_code', 'Product code doesn\'t exists').not().isEmpty(),
-        	body('area_code', 'Area code doesn\'t exists').not().isEmpty(),
-        	body('phone_number', 'Phone number doesn\'t exists').not().isEmpty(),
+        	//body('area_code', 'Area code doesn\'t exists').not().isEmpty(),
+        	//body('phone_number', 'Phone number doesn\'t exists').not().isEmpty(),
         	body('nominal', 'Nominal  should be a number').not().isEmpty().isInt(),
             body('biayaadmin', 'biayaadmin should be a number').not().isEmpty().isInt(),
         	body('ref2', 'ref2 doesn\'t exists').not().isEmpty(),
